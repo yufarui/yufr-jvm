@@ -1,0 +1,341 @@
+= 01-认识java-class-file
+:doctype: article
+:encoding: utf-8
+:lang: zh-cn
+:toc: left
+:toc-title: 导航目录
+:toclevels: 4
+:sectnums:
+:sectanchors:
+
+:hardbreaks:
+:experimental:
+:icons: font
+
+[preface]
+
+目标 完成java版字节码解析器
+拆分目标:
+
+- 认识java-class-file
+建议 阅读英文版原版 java虚拟机规范 <The Java 8 Virtual Machine Specification>
+- 整理并 画出自己理解的java-class-file 常量池信息 以及 元信息!
+* 建立自己的图床,使画图更方便;推荐使用 https://picx.xpoet.cn/[picx图床]
+
+== 阅读记录
+
+当前阅读章节,第4章; The class file Format
+
+=== big-endian(大端序)
+
+推荐阅读::
+https://zh.wikipedia.org/wiki/%E5%AD%97%E8%8A%82%E5%BA%8F[wiki-字节序]
+
+.小结
+****
+一句话总结,大端序,是对人来说,自然且易理解的一种字节排序!
+****
+
+大端序,此词也和前后文说到的字节个数和顺序息息相关;
+
+== classFile-Structure
+
+====
+[source]
+----
+ClassFile { <1>
+ u4 magic; <2>
+ u2 minor_version;
+ u2 major_version;
+ u2 constant_pool_count;
+ cp_info constant_pool[constant_pool_count-1]; <3>
+ u2 access_flags;
+ u2 this_class;
+ u2 super_class;
+ u2 interfaces_count;
+ u2 interfaces[interfaces_count];
+ u2 fields_count;
+ field_info fields[fields_count];
+ u2 methods_count;
+ method_info methods[methods_count];
+ u2 attributes_count;
+ attribute_info attributes[attributes_count];
+}
+----
+<1> classFile 作为一个整体称之为 table
+<2> 每一行视为 item,也即 Tables, consisting of zero or more variable-sized items, are used in several class
+file structures.
+<3> cp => constant_pool 的简写
+<4> u1,u2,u4  对应于The types u1, u2, and u4 represent an unsigned one-, two-, or four-byte quantity,
+respectively
+====
+
+后文中会对每一项,进行说明!
+但是我们先尝试对 常量池进行 基本认识!
+
+=== 补充-关于查看16进制
+推荐使用 od 命令! 此命令在window中类linux系统也能直接运行(如:git-bash)
+
+[source,bash]
+----
+# 获取帮助
+od --help
+# 16进制查看
+od -t xC $class
+----
+
+== constant-pool(cp)
+
+=== 初始化工作
+
+在我们初始化好一个java类之后
+link:/lib/ClassFile.java[ClassFile.java-辅助认识类结构的基础类,window=_blank]
+
+[source,shell]
+----
+# Windows机器推荐安装 choco
+# 在choco查询java
+choco search java
+# 选择java版本并安装,此步设计到环境变量的配置
+# 请以管理员身份运行你的cmd或powershell
+choco install jdk8
+# 安装完成后,choco会提示你刷新的环境变量,命令也提供了
+refreshenv
+# 输入常用的命令确认下
+java -version
+javac -version
+
+# 使用javac编译此段java代码
+javac lib/ClassFile.java
+# 切换到git中执行,16进制
+od -t xC lib/ClassFile.class > lib/ClassFile-hexdump.txt
+----
+
+https://chocolatey.org/[chocolatey-官方网址]
+
+接着我们通过 od 命令,查看此类的16进制内容
+link:lib/ClassFile-hexdump.txt[Classfile-转换成16进制的内容,window=_blank]
+
+按照<<classFile-Structure>>中,字节说明,我们手动解析constant-pool
+
+你最好安装了插件 jcalsslib 以方便你能更轻松地查看类文件;
+
+https://plugins.jetbrains.com/plugin/9248-jclasslib-bytecode-viewer[插件网址]
+
+image::https://cdn.jsdelivr.net/gh/yufarui/simple_picture@main/jvm/jclasslib-tool-intro.png[jclasslib-插件展示]
+
+=== 小试牛刀-手动解析constant-pool
+
+ u2 constant_pool_count;
+ cp_info constant_pool[constant_pool_count-1];
+
+====
+.第一行
+****
+0000000 ca fe ba be 00 00 00 34 00 1d 0a 00 06 00 0f 09
+****
+- u4 ca fe ba be 为magic
+- u2 00 00 为 次版本号
+- u2 00 34 为 主版本号
+- u2 00 1d 即为 constant_pool_count; 1d 转换成10进制为 29
+====
+
+.提示
+****
+实际在解析字节码时,我们也是按照按字节顺序,去解析字节码的;
+****
+
+我们查阅下书籍kbd:[The Java 8 Virtual Machine Specification]中定义
+
+constant_pool[]::
+constant_pool 也是 table-structure，由 string-constants, class and interface-names,
+field-names and other-constants;
+other-constants 其他ClassFile-structure中定义的常量;
+对于每种类型由其头部的 tag 表明;
+并且constant_pool[] 数组序号范围 为 1 至 constant_pool_count - 1;即总数量为constant_pool_count - 1
+
+=== constant-pool定义
+
+====
+.constant-pool-item结构
+[source]
+----
+cp_info {
+ u1 tag; <1>
+ u1 info[]; <2>
+}
+----
+<1> u1 tag用来描述类型,这也是很多dsl,会采用的手段
+<2> 接下来是占位符,不同的tag,其后续并不一致
+====
+
+.constant-pools tag
+|===
+|Constant-Type|Value
+|CONSTANT_Class|7
+|CONSTANT_Fieldref|9
+|CONSTANT_Methodref|10
+|CONSTANT_InterfaceMethodref|11
+|CONSTANT_String|8
+|CONSTANT_Integer|3
+|CONSTANT_Float|4
+|CONSTANT_Long|5
+|CONSTANT_Double|6
+|CONSTANT_NameAndType|12
+|CONSTANT_Utf8|1
+|CONSTANT_MethodHandle|15
+|CONSTANT_MethodType|16
+|CONSTANT_InvokeDynamic|18
+|===
+
+.补充说明
+****
+本次不会将所有的constant-pool-item做解析
+CONSTANT_MethodHandle
+CONSTANT_MethodType
+CONSTANT_InvokeDynamic
+这三项暂时跳过
+****
+
+[%interactive]
+* [*] 请努力画出自己理解的图,加深印象
+[[constant-pool-item-structure]]
+
+=== CONSTANT_Utf8_info
+对应 4.4.7 小节
+
+虽然书中已经说明的很详细,但是还是按自己的理解再说明一次!
+
+[%interactive]
+* [*] 挑战,能不能有更好的说明哪!
+
+====
+[source]
+----
+CONSTANT_Utf8_info {
+ u1 tag; <1>
+ u2 length;<2>
+ u1 bytes[length]; <3>
+}
+----
+<1> tag 的值是1;
+<2> length 是表示字节数组的长度!注意此长度和字符串长度并不一致 (单字节,双字节,三字节字符的存在)
+<3> byte[] 字符串通过字节数组的实际内容
+任何一个 byte都不能为 /u0000, 故而 /u0000是通过双字节表示存在的
+0xf0 ~ 0xff 是不映射任何unicode码
+====
+
+image::https://cdn.jsdelivr.net/gh/yufarui/simple_picture@main/jvm/constant_utf8_info_drawio.png[constant_utf8_info]
+
+.练习
+====
+现在我们已经理解了 constant_utf8_info
+尝试结合 jclasslib 与 16进制码解析 如下 item
+[source]
+----
+01 00 06 3c 69 6e 69 74 3e <1>
+----
+<1> 分解成
+u1 tag 01
+u2 length 00 06 => 6
+u1 byte
+3c 69 6e 69 74 3e => \u003c\u0069\u006e\u0069\u0074\u003e
+即转换成了 <init>
+补充 3c 69 6e 69 74 3e 均小于 7F,故均为单字节字符
+====
+
+=== CONSTANT_Integer_info and CONSTANT_Float_info Structures
+
+====
+[source]
+----
+CONSTANT_Integer_info {
+ u1 tag;
+ u4 bytes; <1>
+}
+CONSTANT_Float_info {
+ u1 tag;
+ u4 bytes; <1>
+}
+----
+<1> u4 bytes ,即是我们常说的32位长度
+====
+
+对于 Integer,其数字和内容保持一致;
+但是对于浮点数Float,你需要理解IEEE 754标准,并且具备相关的数学基本功,才能完全理解!
+浅尝辄止,之后我们回头再研究清楚此问题
+
+推荐阅读::
+http://c.biancheng.net/view/314.html[IEEE 754浮点数标准详解-C语言入门]
+
+[%interactive]
+* [*] 我们还是尝试用自己的方式去理解之!
+
+http://asciimath.org/[数学表达式,参考asciimath语法]
+
+==== 前提1.小数部位表示法
+详细:在二进制中,小数的表达方式,如同在10进制中的表达,
+如0.101,即可表达为二进制小数点,
+而对于此小数,它是可以精确映射10进制小数,且映射规则如下:
+
+[asciimath,image/01.png]
+++++
+0.a_1...a_n=sum_(i=1)^na_i * 2^-i;a_i in (0,1);
+
+text(i表示小数点后i位的数字位置)
+
+:' 0.a_1...a_n=
+a_1 * 2^-1 + a_2 * 2^-2 + ... + a_n * 2^-n
+
+:.text(由归纳法,易知等式成立)
+++++
+
+==== 证明题.规范小数的由来
+详细:二进制中,任意一个带整数部分的小数,都可以变成一种标准格式的小数;
+
+[asciimath]
+++++
+如 1001.101 可以表示成
+1.001101 * 2^3
+
+即 M * 2^E, 且 M in [1,2);text(其中M 表示为有效数字, E 表示指数值)
+text(证明如下:)
+
+a_0a_1...a_k
+= a_0 * 2^k + a_1 * 2^(k-1) + ... + a_i * 2^(k-i) + ... + a_k * 2^0
+= sum_(i=0)^ka_i * 2^(k-i);
+
+0.a_(k+1)...a_n
+= sum_(i=k+1)^na_i * 2^-i;
+
+a_0a_1...a_k.a_(k+1)...a_n
+= sum_(i=0)^ka_i * 2^(k-i) + sum_(i=k+1)^na_i * 2^-i
+
+= sum_(i=0)^na_i * 2^(k-i)
+
+=  2^k * sum_(i=0)^na_i * 2^-i text(提取公共项)
+
+= (a_0 * 2^0 + sum_(i+1)^na_i * 2^-i) * 2^k
+
+:'sum_(i+1)^na_i * 2^-i=0.a_1...a_n,已在前提1中说明
+
+:.上式=(a_0 + 0.a_1...a_n) * 2^k
+= a_0.a_1...a_n * 2^k
+
+(其中a_0=1)
+++++
+
+能理解这两道数学题,即代表你已经初步理解IEEE 754标准!恭喜!
+
+
+
+.插曲
+****
+写这篇文章中,由于新买的电脑,使用还不是很熟练;
+git pull or push 都有问题;
+才发现Windows默认给我加了个代理;
+## 设置全局代理
+git config --global http.proxy $pac.proxy
+https://blog.csdn.net/u011476390/article/details/93411139[参考文章]
+****
+
