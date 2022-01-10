@@ -213,14 +213,13 @@ CONSTANT_InvokeDynamic
 [source]
 ----
 CONSTANT_Utf8_info {
- u1 tag; <1>
- u2 length;<2>
- u1 bytes[length]; <3>
+ u1 tag; // 1
+ u2 length;<1>
+ u1 bytes[length]; <2>
 }
 ----
-<1> tag 的值是1;
-<2> length 是表示字节数组的长度!注意此长度和字符串长度并不一致 (单字节,双字节,三字节字符的存在)
-<3> byte[] 字符串通过字节数组的实际内容
+<1> length 是表示字节数组的长度!注意此长度和字符串长度并不一致 (单字节,双字节,三字节字符的存在)
+<2> byte[] 字符串通过字节数组的实际内容
 任何一个 byte都不能为 /u0000, 故而 /u0000是通过双字节表示存在的
 0xf0 ~ 0xff 是不映射任何unicode码
 ====
@@ -250,15 +249,14 @@ u1 byte
 [source]
 ----
 CONSTANT_Integer_info {
- u1 tag;
+ u1 tag; // 3
  u4 bytes; <1>
 }
 CONSTANT_Float_info {
- u1 tag;
+ u1 tag; // 4
  u4 bytes; <1>
 }
 ----
-tag => long 3 double 4
 <1> u4 bytes ,即是我们常说的32位长度
 ====
 
@@ -386,17 +384,16 @@ image::https://cdn.jsdelivr.net/gh/yufarui/simple_picture@main/jvm/constant_floa
 [source]
 ----
 CONSTANT_Long_info {
- u1 tag;
+ u1 tag; // 5
  u4 high_bytes; <1>
  u4 low_bytes; <2>
 }
 CONSTANT_Double_info {
- u1 tag;
+ u1 tag; // 6
  u4 high_bytes; <1>
  u4 low_bytes; <2>
 }
 ----
-tag => long 5 double 6
 <1> high_bytes 高32位,即使系统已经是64位系统;但是处于兼容;
 仍然全部以32位计算
 <2> low_bytes 低32位
@@ -419,6 +416,123 @@ long m = (e == 0) ?
 # double的计算表达式为
 s * m * 2^(e-1075)
 ****
+
+=== The CONSTANT_Class_info Structure
+
+====
+[source]
+----
+CONSTANT_Class_info {
+u1 tag; // 7
+u2 name_index; <1>
+}
+----
+<1> u2 name_index;name_index项的值必须是constant_pool表中的有效索引;
+该索引处的constant_pool条目必须是一个CONSTANT_Utf8_info结构（4.4.7),
+表示一个有效的二进制类或以内部形式编码的接口名称
+
+====
+
+.class_info的实际举例
+****
+如在ClassFile.class中通过 jclasslib中观察
+
+[08]CONSTANT_Class_info 对应 二进制为 07 00 1b
+00 1b对应着 28-1 个序号的 CONSTANT_Utf8_info
+
+而对应的28个序号的实际值为
+[28]CONSTANT_Utf8_info java/lang/System
+
+你可以通过 kdb:[jclasslib] 来观察,以验证此结论
+****
+
+=== The CONSTANT_String_info Structure
+
+====
+[source]
+----
+CONSTANT_String_info {
+u1 tag; // 8
+u2 string_index; <1>
+}
+----
+<1> 同 class_info中的name_index,其值最终指向 CONSTANT_Utf8_info
+====
+
+=== The CONSTANT_NameAndType_info Structure
+
+====
+[source]
+----
+CONSTANT_NameAndType_info { <1>
+u1 tag; // 12
+u2 name_index; <2>
+u2 descriptor_index; <3>
+}
+----
+<1> CONSTANT_NameAndType_info结构用于表示一个字段或方法，而不指示它属于哪个类或接口类型
+<2> 同 CONSTANT_Class_info 中 name_index,指向 CONSTANT_Utf8_info
+<3> 同 name_index,指向 CONSTANT_Utf8_info关于; 而描述符 详细阅读 4.3小结
+====
+
+.描述符
+|===
+|FieldType term| Type| Interpretation
+|B |byte| signed byte
+|C |char| Unicode character code point in the Basic Multilingual Plane, encoded with UTF-16
+|D |double| double-precision floating-point value
+|F |float| single-precision floating-point value
+|I |int| integer
+|J |long| long integer
+|L ClassName ;| reference| an instance of class ClassName
+|S |short| signed short
+|Z |boolean| true or false
+|[ |reference| one array dimension
+|===
+
+> 对于二位数组,则用 `[[` 来描述,依次类推多维数组
+
+.描述符举例
+****
+Object m(int i, double d, Thread t) {...}
+
+对于此方法
+其descriptor为 (IDLjava/lang/Thread;)Ljava/lang/Object;
+****
+没必要记忆,有需要查询书籍即可
+
+=== The CONSTANT_Fieldref_info, CONSTANT_Methodref_info, and CONSTANT_InterfaceMethodref_info Structures
+
+====
+[source]
+----
+CONSTANT_Fieldref_info {
+ u1 tag; // 9
+ u2 class_index;
+ u2 name_and_type_index;
+}
+CONSTANT_Methodref_info {
+ u1 tag; // 10
+ u2 class_index;
+ u2 name_and_type_index;
+}
+CONSTANT_InterfaceMethodref_info {
+ u1 tag; // 11
+ u2 class_index;
+ u2 name_and_type_index;
+}
+----
+class_index::
+指明 字段,方法,接口方法 对应的索引,utf8值表示类的名称;
+示例值 <java/lang/Object>
+name_and_type_index::
+对应 CONSTANT_NameAndType_info;指明 字段,方法,接口方法 对应的名称 和 描述
+====
+
+到此阶段,我们整体阅读了一遍常量池,相信你已经对常量池有所了解!
+
+[%interactive]
+* [*] 一张图,整体总结下!请务必自己画一画!
 
 
 .插曲
