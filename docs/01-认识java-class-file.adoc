@@ -258,6 +258,7 @@ CONSTANT_Float_info {
  u4 bytes; <1>
 }
 ----
+tag => long 3 double 4
 <1> u4 bytes ,即是我们常说的32位长度
 ====
 
@@ -354,18 +355,69 @@ float a = 8.5 实际对应的16进制 为 0x41080000;代入公式中参与运算
 8.5 实际上换算成二进制小数 为 0b1000.1
 我们知道 1000.1 = 1.0001 * 2^3;
 
-理论上符号位 0
-理论指数位值 3
-理论有效小数  0b0001
-理论规范小数 0b10001
+实际上符号位 0
+实际指数位值 3
+实际规范小数 1.0001
+实际有效小数  0001
 
-实际符号位 b1 0
-实际指数位 130 - 150 = -20
-实际有效小数 b23 000 1000 0000 0000 0000 0000
-实际规范小数(m) 1000 1000 0000 0000 0000 0000
+32位float符号位 b1 0
+32位float指数位 130 - 150 = -20
+32位float规范小数(m) 1000 1000 0000 0000 0000 0000
+32位float有效小数 b23 000 1000 0000 0000 0000 0000
 
-理论规范小数 * 2^23 * 2^(-20)
+实际规范小数 * 2^23 = 32位float规范小数
 
+实际规范小数 * 2^23 * 2^(-20) = 实际规范小数 * 2^3 = 浮点小数
+
+你可以挑战十进制小数8.8的二进制表示
+****
+
+.举例分析对应的图示
+image::https://cdn.jsdelivr.net/gh/yufarui/simple_picture@main/jvm/constant_float_info_intro_drawio.png[举例分析对应的图示]
+
+.float整体分析
+image::https://cdn.jsdelivr.net/gh/yufarui/simple_picture@main/jvm/constant_float_info_drawio.drawio.png[float_info整体解释]
+
+=== CONSTANT_Long_info and CONSTANT_Double_info Structures
+
+在有了float的分析经验的基础,我们现在能比较清楚 double的结构
+
+====
+[source]
+----
+CONSTANT_Long_info {
+ u1 tag;
+ u4 high_bytes; <1>
+ u4 low_bytes; <2>
+}
+CONSTANT_Double_info {
+ u1 tag;
+ u4 high_bytes; <1>
+ u4 low_bytes; <2>
+}
+----
+tag => long 5 double 6
+<1> high_bytes 高32位,即使系统已经是64位系统;但是处于兼容;
+仍然全部以32位计算
+<2> low_bytes 低32位
+====
+
+.double-三部分的bit位表示方式
+****
+((long) high_bytes << 32) + low_bytes
+现计算出整体64位的结构
+
+# s为第63位
+int s = ((bits >> 63) == 0) ? 1 : -1;
+# e为第62~52位
+int e = (int)((bits >> 52) & 0x7ffL);
+# m为第51~0位
+long m = (e == 0) ?
+(bits & 0xfffffffffffffL) << 1 :
+(bits & 0xfffffffffffffL) | 0x10000000000000L;
+
+# double的计算表达式为
+s * m * 2^(e-1075)
 ****
 
 
