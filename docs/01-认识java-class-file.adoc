@@ -530,9 +530,13 @@ name_and_type_index::
 ====
 
 到此阶段,我们整体阅读了一遍常量池,相信你已经对常量池有所了解!
+常量池,是字节码解析的基础;类元信息会索引到此区域!
 
 [%interactive]
 * [*] 一张图,整体总结下!请务必自己画一画!
+
+.常量池的整体分析
+image::https://cdn.jsdelivr.net/gh/yufarui/simple_picture@main/jvm/constant_pool_summary.png[常量池的整体分析]
 
 
 .插曲
