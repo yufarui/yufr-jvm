@@ -575,7 +575,234 @@ field_info {
 https://docs.oracle.com/javase/specs/jls/se8/html/index.html[JLS官方文档]
 ****
 
+=== Methods
 
+[source]
+----
+method_info {
+u2 access_flags;
+u2 name_index;
+u2 descriptor_index;
+u2 attributes_count;
+attribute_info attributes[attributes_count];
+}
+----
+
+
+== Attributes
+
+阅读 Attributes 可以通过网页版,可以快速导航到JLS
+https://blog.51cto.com/u_330478/3623016[ClassFile-Attributes-网页版]
+
+====
+[source]
+----
+attribute_info {
+ u2 attribute_name_index; <1>
+ u4 attribute_length; <1>
+ u1 info[attribute_length];
+}
+----
+<1> attribute_info的固有结构;根据attribute_name_index
+所对应的实际值;决定了info的结构;
+详细查看 之后 `ConstantValue Attribute` `Code Attribute`
+====
+
+=== The ConstantValue Attribute
+
+[source]
+----
+ConstantValue_attribute {
+u2 attribute_name_index;
+u4 attribute_length;
+u2 constantvalue_index;
+}
+----
+
+常量属性
+There may be at most one ConstantValue attribute in the attributes table of a field_info structure.
+
+常见的定义常量的方式
+[source,java]
+----
+private static final int num = 12;
+----
+
+.整个字段16进制结构剖析
+****
+
+实际的 16进制代码片段
+00 19 00 0f 00 10 00 01
+00 11 00 00 00 02 00 12
+
+00 19
+u2 access_flags; 0x0019 [public static final]
+access_flags = public + static + final的和
+
+00 0f
+u2 name_index; cp_info#15
+name_index指向常量池,其值为 num;
+
+00 10
+u2 descriptor_index; cp_info#16
+descriptor_index指向常量池,其值为 I;
+
+00 01
+u2 attributes_count;
+
+00 11
+u2 attribute_name_index; cp_info#17
+常量池索引;其值为 ConstantValue;
+
+00 00 00 02
+u4 attribute_length; 属性内容的长度
+
+00 12
+u2 constantvalue_index; cp_info#18
+常量池索引;其值为 12;
+****
+
+=== The Code Attribute
+
+code-attribute 使用来描述方法的;也是重点属性!必须认真看!
+
+[source]
+----
+Code_attribute {
+ u2 attribute_name_index;
+ u4 attribute_length;
+ u2 max_stack;
+ u2 max_locals;
+ u4 code_length;
+ u1 code[code_length];
+ u2 exception_table_length;
+ {  u2 start_pc;
+    u2 end_pc;
+    u2 handler_pc;
+    u2 catch_type;
+ } exception_table[exception_table_length];
+ u2 attributes_count;
+ attribute_info attributes[attributes_count];
+}
+----
+
+[source]
+----
+LineNumberTable_attribute {
+u2 attribute_name_index;
+u4 attribute_length;
+u2 line_number_table_length;
+{   u2 start_pc;
+u2 line_number;
+} line_number_table[line_number_table_length];
+}
+----
+
+
+初始的方法
+[source,java]
+----
+public static void main(String[] args) {
+        System.out.println("Hello World");
+    }
+----
+
+.方法的16进制片段剖析
+****
+- 16进制中原byte
+# 方法信息
+00 09 00 17 00 18 00 01 00 15 00 00 00 25 00 02 00 01 00
+# 字节码信息
+00 00 09 b2 00 07 12 08 b6 00 09 b1
+# 异常信息
+00 00
+# code_attribute中的其他attribute
+00 01
+# LineNumberTable
+00 16 00 00 00 0a 00 02 00 00 00 0d 00 08 00 0e
+
+- 方法信息
+00 09 00 17 00 18 00 01 00 15 00 00 00 25 00 02 00 01 00
+
+00 09
+u2 access_flags 0x0009;[public static]
+00 09 = public + static;
+
+u2 name_index; cp_info#23 => 0x0017
+常量池索引,值为 main
+
+u2 descriptor_index; cp_info#24 => 0x0018
+常量池索引,值为 ([Ljava/lang/String;)V
+
+u2 attributes_count; 0x0001
+只有一个attribute,即code_attribute;
+
+u2 attribute_name_index; cp_info#21 => 0x0015
+常量池索引,值为 Code; 表明attribute,为code_attribute;
+
+00 00 00 25
+u4 attribute_length; 属性长度37
+
+00 02
+u2 max_stack; 操作数栈最大深度 0x0002
+
+00 01
+u2 max_locals; 局部变量最大槽数 0x0001
+
+- 字节码信息
+00 00 09 b2 00 07 12 08 b6 00 09 b1
+
+00 00 00 09
+u4 code_length; 字节码长度 0x0009
+
+b2 00 07 12 08 b6 00 09 b1
+字节码实际内容
+
+b2 00 07 =>
+getstatic #7
+#7 对应cp_info#7 对应的是 CONSTANT_Fieldref_info 其值为 java/lang/System.out : Ljava/io/PrintStream;
+
+12 08
+ldc #8
+#8 => 对应的是Constant_String_info 其值为Hello World
+
+b6 00 09
+invokevirtual #9
+#9 => 对应的是 CONSTANT_Methodref_info java/io/PrintStream.println : (Ljava/lang/String;)V
+
+return
+
+- 异常信息
+00 00
+u2 exception_table_length; 不存在异常项
+
+- code_attribute中的其他attribute
+00 01
+u2 attributes_count; code_attribute中其他的attribute
+
+- LineNumberTable
+00 16 00 00 00 0a 00 02 00 00 00 0d 00 08 00 0e
+
+00 16
+u2 attribute_name_index; cp_info#22 => 0x0016
+常量池索引,值为 LineNumberTable
+
+00 00 00 0a
+u4 attribute_length; 属性长度 10;
+
+00 02
+u2 line_number_table_length; table长度为2
+
+第一项
+u2 start_pc; 00 00
+u2 line_number; 00 0d => 13行
+
+第二项
+u2 start_pc; 00 08
+u2 line_number; 00 0e => 14行
+
+start_pc指的是字节码偏移量
+****
 
 .插曲
 ****
