@@ -884,7 +884,6 @@ signature_index::
 这是唯一区别于 `LocalVariableTable` 中的属性;
 表明了泛型的类型; 如 `Ljava/util/List<Ljava/lang/String;>;`
 
-
 [%interactive]
 * [*] 一张图,整体总结下!请务必自己画一画!
 
@@ -900,4 +899,3 @@ git pull or push 都有问题;
 git config --global http.proxy $pac.proxy
 https://blog.csdn.net/u011476390/article/details/93411139[参考文章]
 ****
-
