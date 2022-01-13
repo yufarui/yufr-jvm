@@ -588,7 +588,6 @@ attribute_info attributes[attributes_count];
 }
 ----
 
-
 == Attributes
 
 阅读 Attributes 可以通过网页版,可以快速导航到JLS
@@ -655,12 +654,22 @@ u2 attribute_name_index; cp_info#17
 常量池索引;其值为 ConstantValue;
 
 00 00 00 02
-u4 attribute_length; 属性内容的长度
+u4 attribute_length; 属性内容的长度,字节码的长度
 
 00 12
 u2 constantvalue_index; cp_info#18
 常量池索引;其值为 12;
 ****
+
+.ConstantValue只对固定的Field-Type生效
+|===
+|Field Type |Entry Type
+|long| CONSTANT_Long
+|float| CONSTANT_Float
+|double| CONSTANT_Double
+|int, short, char, byte, boolean| CONSTANT_Integer
+|String| CONSTANT_String
+|===
 
 === The Code Attribute
 
@@ -697,7 +706,6 @@ u2 line_number;
 } line_number_table[line_number_table_length];
 }
 ----
-
 
 初始的方法
 [source,java]
@@ -756,7 +764,7 @@ u2 max_locals; 局部变量最大槽数 0x0001
 u4 code_length; 字节码长度 0x0009
 
 b2 00 07 12 08 b6 00 09 b1
-字节码实际内容
+字节码实际内容 详细查看字节码操作的助记符<<Opcode-Mnemonics-by-Opcode>>
 
 b2 00 07 =>
 getstatic #7
@@ -770,6 +778,7 @@ b6 00 09
 invokevirtual #9
 #9 => 对应的是 CONSTANT_Methodref_info java/io/PrintStream.println : (Ljava/lang/String;)V
 
+b1
 return
 
 - 异常信息
@@ -801,8 +810,86 @@ u2 line_number; 00 0d => 13行
 u2 start_pc; 00 08
 u2 line_number; 00 0e => 14行
 
-start_pc指的是字节码偏移量
+start_pc指的是字节码初始偏移量
 ****
+
+[[Opcode-Mnemonics-by-Opcode]]
+https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-7.html[字节码操作的助记符]
+
+.关于code_attribute中额外的解释
+****
+b2 00 07 与 b2 08
+字节占位长度不一致;是因为操作数 有的一个 有的两个;
+
+关于 start_pc的解释
+00 16 <1>
+00 00 00 0a <2>
+00 02 <3>
+00 00 00 0d <4>
+00 08 00 0e <5>
+
+第<2>行,表示字节码长度为10;
+这个10指的是 <3> <4> <5>的整体长度为10个字节;
+第<4>行 00 00 表示第一行table项 start_pc 为 0;
+第<5>行 00 08 表示第二行table项 start_pc 为 8;
+这也就是字节码偏移量的具体解释
+****
+
+=== The LocalVariableTable Attribute
+
+局部变量表;当然此属性也是 `code_attribute`中的属性
+
+[source]
+----
+LocalVariableTable_attribute {
+ u2 attribute_name_index;
+ u4 attribute_length;
+ u2 local_variable_table_length;
+ { u2 start_pc;
+ u2 length;
+ u2 name_index;
+ u2 descriptor_index;
+ u2 index;
+ } local_variable_table[local_variable_table_length];
+}
+----
+
+name_index::
+局部变量的名称
+
+descriptor_index::
+局部变量的类型名称; 如 `Ljava/lang/String;`
+
+=== The LocalVariableTypeTable Attribute
+
+局部变量泛型类型表;当然此属性也是 `code_attribute`中的属性
+此属性只记录局部变量中为泛型的变量信息;
+
+[source]
+----
+LocalVariableTypeTable_attribute {
+u2 attribute_name_index;
+u4 attribute_length;
+u2 local_variable_type_table_length;
+{ u2 start_pc;
+u2 length;
+u2 name_index;
+u2 signature_index;
+u2 index;
+} local_variable_type_table[local_variable_type_table_length];
+}
+----
+
+signature_index::
+这是唯一区别于 `LocalVariableTable` 中的属性;
+表明了泛型的类型; 如 `Ljava/util/List<Ljava/lang/String;>;`
+
+
+[%interactive]
+* [*] 一张图,整体总结下!请务必自己画一画!
+
+.类元信息的整体分析
+image::https://cdn.jsdelivr.net/gh/yufarui/simple_picture@main/jvm/meta_code_attributes.png[类元信息的整体分析]
 
 .插曲
 ****
