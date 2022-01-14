@@ -1,0 +1,19 @@
+= 02-构建自己的字节码解析器-partA
+:doctype: article
+:encoding: utf-8
+:lang: zh-cn
+:toc: left
+:toc-title: 导航目录
+:toclevels: 4
+:sectnums:
+:sectanchors:
+
+:hardbreaks:
+:experimental:
+:icons: font
+
+[preface]
+
+目标,完成 hello-world 的输出!
+为此我们需要构建一个轻量级的,只包含部分字节码解析的java代码!
+
