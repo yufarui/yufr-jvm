@@ -14,6 +14,125 @@
 
 [preface]
 
-目标,完成 hello-world 的输出!
-为此我们需要构建一个轻量级的,只包含部分字节码解析的java代码!
+构建字节码解析器,为构建自己java版本的jvm做预热
 
+== 字节码解析器实战
+
+[source]
+----
+ClassFile {
+ u4 magic;
+ u2 minor_version;
+ u2 major_version;
+ u2 constant_pool_count;
+ cp_info constant_pool[constant_pool_count-1];
+ u2 access_flags;
+ u2 this_class;
+ u2 super_class;
+ u2 interfaces_count;
+ u2 interfaces[interfaces_count];
+ u2 fields_count;
+ field_info fields[fields_count];
+ u2 methods_count;
+ method_info methods[methods_count];
+ u2 attributes_count;
+ attribute_info attributes[attributes_count];
+}
+----
+
+在你阅读完成classFile的结构后,想必大致上能理解,jvm是如何解析字节码文件的;
+
+[%interactive]
+* [*] 可以提前阅读hotspot源码,但是若没有cpp基础,则不阅读也可
+
+笔者当前也没有cpp基础,所以也没有阅读!
+
+根据classFile结构,我们依次定义我们java版的字节码相关对象!
+
+== oops
+
+oops 对应hotspot源码目录,oop 是指字节码相关对象
+
+=== InstanceKlass
+
+对应源码 instanceKlass(.cpp/.hpp)
+
+====
+[source,java]
+----
+public class InstanceKlass {
+
+    private int magic; <1>
+    private short minorVersion; <2>
+    private short majorVersion;
+
+    private ConstantPool constantPool;
+
+    private short accessFlag;
+    private short thisClass;
+    private short superClass;
+
+    private short interfacesLength;
+    private InterfaceInfo[] interfaceInfos; <3>
+
+    private short fieldsLength;
+    private FieldInfo[] fields;
+
+    private short methodLength;
+    private MethodInfo[] methods;
+
+    private short attributeLength;
+    private AttributeInfo[] attributeInfos;
+}
+----
+<1> u4 magic; 使用 int表示
+<2> u2 minorVersion; 使用 short表示
+<3> table统一使用一维数组表示
+====
+
+[source,java]
+----
+public class ConstantPool {
+
+    private InstanceKlass poolHolder;
+    private int length;
+    private ConstantPoolItem item;
+}
+----
+
+====
+[source,java]
+----
+public class ConstantPoolItem {
+
+    private ConstantTag tag;
+    private short length;
+    private Object content;
+
+}
+----
+特殊点
+CONSTANT_Utf8_info,只有此常量拥有显示的字节码长度描述;
+部分常量项拥有一个index;
+short index => name_index
+
+部分常量项有拥有两个index;
+int index => name_index << 16 | descriptor_index;
+====
+
+====
+[source]
+----
+public class InterfaceInfo {
+    private short index; <1>
+}
+----
+<1> 指向常量池Class_info
+====
+
+====
+[source]
+----
+
+----
+====
