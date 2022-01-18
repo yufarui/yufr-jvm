@@ -10,8 +10,7 @@ public class InterfaceInfo {
 
     public String getName(InstanceKlass instanceKlass) {
 
-        ConstantPoolItem[] allItems = instanceKlass.getConstantPool().getItems();
-
+        ConstantPoolItem[] allItems = instanceKlass.getConstantPoolItems();
         ConstantPoolItem item = allItems[index];
 
         short classInfoIndex = item.getAsSingleIndex();

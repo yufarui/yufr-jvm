@@ -1,5 +1,6 @@
 package indi.yufr.jvm.yuShare.vm.oops;
 
+import indi.yufr.jvm.yuShare.vm.utilities.ConstantTag;
 import lombok.Data;
 
 /**
@@ -9,13 +10,23 @@ import lombok.Data;
 @Data
 public class ConstantPoolItem {
 
-    private ConstantTag tag;
-    private int length;
+    protected ConstantTag tag;
+    // 忽略了length属性
     private Object content;
 
-    // todo 转换
+    public ConstantPoolItem() {
+    }
+
+    public ConstantPoolItem(ConstantTag tag) {
+        this.tag = tag;
+    }
+
     public String getAsString() {
-        return (String)content;
+        switch (tag) {
+            case JVM_CONSTANT_Utf8:
+                return (String) content;
+        }
+        throw new RuntimeException("不支持的转换项");
     }
 
     public short getAsSingleIndex() {

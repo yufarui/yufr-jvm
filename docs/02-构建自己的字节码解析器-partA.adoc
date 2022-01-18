@@ -130,9 +130,14 @@ public class InterfaceInfo {
 <1> 指向常量池Class_info
 ====
 
-====
-[source]
+[source,java]
+----
+public class FieldInfo {
+    private AccessFlags accessFlags;
+    private short nameIndex;
+    private short descriptorIndex;
+    private short attributesCount;
+    private CodeAttributeInfo[] attributes;
+}
 ----
 
-----
-====

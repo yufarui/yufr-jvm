@@ -1,6 +1,5 @@
-package indi.yufr.jvm.yuShare.vm.oops;
+package indi.yufr.jvm.yuShare.vm.utilities;
 
-import indi.yufr.jvm.yuShare.vm.utilities.BasicType;
 import lombok.Getter;
 
 public enum ConstantTag {
@@ -51,5 +50,21 @@ public enum ConstantTag {
                 throw new InternalError("unexpected tag: " + tag);
         }
     }
+
+    public static ConstantTag of(byte tag) {
+
+        ConstantTag[] values = ConstantTag.values();
+        for (int i = 0; i < values.length; i++) {
+            ConstantTag value = values[i];
+            if (value.tag == tag) {
+                return value;
+            }
+        }
+
+        throw new RuntimeException("无法解析tag");
+    }
+
+
+
 
 }

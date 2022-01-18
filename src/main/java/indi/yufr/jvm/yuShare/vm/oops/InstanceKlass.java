@@ -8,11 +8,13 @@ import lombok.Data;
  */
 @Data
 public class InstanceKlass {
+
     private int magic;
     private short minorVersion;
     private short majorVersion;
 
-    private ConstantPool constantPool;
+    private short constantPoolCount;
+    private ConstantPoolItem[] constantPoolItems;
 
     private short accessFlag;
     private short thisClass;
@@ -22,12 +24,16 @@ public class InstanceKlass {
     private InterfaceInfo[] interfaceInfos;
 
     private short fieldsLength;
-//    private FieldInfo[] fields;
-//
-//    private short methodLength;
-//    private MethodInfo[] methods;
-//
-//    private short attributeLength;
-//    private AttributeInfo[] attributeInfos;
+    private FieldInfo[] fields;
+
+    private short methodLength;
+    private MethodInfo[] methods;
+
+    private short attributeLength;
+    private AttributeInfo[] attributeInfos;
+
+    public void initConstantPool() {
+        this.constantPoolItems = new ConstantPoolItem[constantPoolCount];
+    }
 
 }
