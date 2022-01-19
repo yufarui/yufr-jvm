@@ -31,4 +31,17 @@ public enum AccessFlags {
     AccessFlags(int flags) {
         this.flags = flags;
     }
+
+    public static AccessFlags of(short flags) {
+
+        AccessFlags[] values = AccessFlags.values();
+        for (int i = 0; i < values.length; i++) {
+            AccessFlags value = values[i];
+            if (value.flags == flags) {
+                return value;
+            }
+        }
+
+        throw new RuntimeException("无法解析flags");
+    }
 }

@@ -1,5 +1,7 @@
-package indi.yufr.jvm.yuShare.constantTag;
+package indi.yufr.jvm.yuShare.constant.executor;
 
+import indi.yufr.jvm.yuShare.constant.content.ConstantContent;
+import indi.yufr.jvm.yuShare.constant.content.IntegerInfo;
 import indi.yufr.jvm.yuShare.tools.Stream;
 import indi.yufr.jvm.yuShare.vm.classFile.ByteIndex;
 import indi.yufr.jvm.yuShare.vm.utilities.ConstantTag;
@@ -20,8 +22,10 @@ public class ConstantIntegerInfoExecutor extends ConstantInfoExecutor {
     }
 
     @Override
-    public Object doParseInfo(byte[] content, ByteIndex index) {
+    public ConstantContent doParseInfo(byte[] content, ByteIndex index) {
 
-        return Stream.readU4(content, index);
+        return IntegerInfo.builder()
+                .content(Stream.readU4(content, index))
+                .build();
     }
 }

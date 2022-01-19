@@ -1,5 +1,6 @@
-package indi.yufr.jvm.yuShare.constantTag;
+package indi.yufr.jvm.yuShare.constant.executor;
 
+import indi.yufr.jvm.yuShare.constant.content.ConstantContent;
 import indi.yufr.jvm.yuShare.vm.classFile.ByteIndex;
 import indi.yufr.jvm.yuShare.vm.utilities.ConstantTag;
 
@@ -18,6 +19,6 @@ public abstract class ConstantInfoExecutor {
      * @param index
      * @return
      */
-    public abstract Object doParseInfo(byte[] content, ByteIndex index);
+    public abstract ConstantContent doParseInfo(byte[] content, ByteIndex index);
 
 }

@@ -1,5 +1,7 @@
-package indi.yufr.jvm.yuShare.constantTag;
+package indi.yufr.jvm.yuShare.constant.executor;
 
+import indi.yufr.jvm.yuShare.constant.content.ConstantContent;
+import indi.yufr.jvm.yuShare.constant.content.FloatInfo;
 import indi.yufr.jvm.yuShare.tools.DataTranslate;
 import indi.yufr.jvm.yuShare.tools.Stream;
 import indi.yufr.jvm.yuShare.vm.classFile.ByteIndex;
@@ -21,9 +23,12 @@ public class ConstantFloatInfoExecutor extends ConstantInfoExecutor {
     }
 
     @Override
-    public Object doParseInfo(byte[] content, ByteIndex index) {
+    public ConstantContent doParseInfo(byte[] content, ByteIndex index) {
 
         byte[] bytes = Stream.readBytes(content, index, 4);
-        return DataTranslate.byteToFloat(bytes);
+
+        return FloatInfo.builder()
+                .content(DataTranslate.byteToFloat(bytes))
+                .build();
     }
 }

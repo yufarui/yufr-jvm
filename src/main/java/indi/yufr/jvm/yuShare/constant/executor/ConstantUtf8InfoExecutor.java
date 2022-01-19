@@ -1,5 +1,7 @@
-package indi.yufr.jvm.yuShare.constantTag;
+package indi.yufr.jvm.yuShare.constant.executor;
 
+import indi.yufr.jvm.yuShare.constant.content.ConstantContent;
+import indi.yufr.jvm.yuShare.constant.content.Utf8Info;
 import indi.yufr.jvm.yuShare.tools.Stream;
 import indi.yufr.jvm.yuShare.vm.classFile.ByteIndex;
 import indi.yufr.jvm.yuShare.vm.utilities.ConstantTag;
@@ -20,13 +22,15 @@ public class ConstantUtf8InfoExecutor extends ConstantInfoExecutor {
     }
 
     @Override
-    public Object doParseInfo(byte[] content, ByteIndex index) {
+    public ConstantContent doParseInfo(byte[] content, ByteIndex index) {
         short length = Stream.readU2(content, index);
 
         // 原本是根据读取到的first,来处理字符串
         // 当前直接使用 new String 方法处理
         byte[] bytes = Stream.readBytes(content, index, length);
 
-        return new String(bytes);
+        return Utf8Info.builder()
+                .content(new String(bytes))
+                .build();
     }
 }

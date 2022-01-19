@@ -1,5 +1,7 @@
-package indi.yufr.jvm.yuShare.constantTag;
+package indi.yufr.jvm.yuShare.constant.executor;
 
+import indi.yufr.jvm.yuShare.constant.content.ConstantContent;
+import indi.yufr.jvm.yuShare.constant.content.MetaRefInfo;
 import indi.yufr.jvm.yuShare.tools.Stream;
 import indi.yufr.jvm.yuShare.vm.classFile.ByteIndex;
 import indi.yufr.jvm.yuShare.vm.utilities.ConstantTag;
@@ -8,7 +10,7 @@ import indi.yufr.jvm.yuShare.vm.utilities.ConstantTag;
  * @date: 2022/1/18 14:23
  * @author: farui.yu
  */
-public class ConstantDoubleIndexExecutor extends ConstantInfoExecutor {
+public class ConstantMetaRefExecutor extends ConstantInfoExecutor {
 
     @Override
     public boolean canSupport(ConstantTag tag) {
@@ -24,12 +26,16 @@ public class ConstantDoubleIndexExecutor extends ConstantInfoExecutor {
     }
 
     @Override
-    public Object doParseInfo(byte[] content, ByteIndex index) {
+    public ConstantContent doParseInfo(byte[] content, ByteIndex index) {
 
         short firstIndex = Stream.readU2(content, index);
-
         short secondIndex = Stream.readU2(content, index);
 
-        return firstIndex << 16 | secondIndex;
+
+
+        return MetaRefInfo.builder()
+                .classIndex(firstIndex)
+                .nameAndTypeIndex(secondIndex)
+                .build();
     }
 }

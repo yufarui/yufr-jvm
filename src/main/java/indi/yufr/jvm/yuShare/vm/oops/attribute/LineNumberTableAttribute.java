@@ -1,4 +1,4 @@
-package indi.yufr.jvm.yuShare.vm.oops;
+package indi.yufr.jvm.yuShare.vm.oops.attribute;
 
 import lombok.Data;
 

@@ -7,6 +7,10 @@ import java.nio.ByteOrder;
 
 public class Stream {
 
+    public static void skip(ByteIndex byteIndex, int length) {
+        byteIndex.plus(length);
+    }
+
     public static byte[] readBytes(byte[] content, ByteIndex byteIndex, int length) {
         byte[] bytes = readByte(content, byteIndex.getIndex(), length);
         byteIndex.plus(length);

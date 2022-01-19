@@ -7,7 +7,7 @@ import lombok.Data;
  * @author: farui.yu
  */
 @Data
-public class InstanceKlass {
+public class InstanceKlass extends AbstractAttributeObject {
 
     private int magic;
     private short minorVersion;
@@ -16,7 +16,7 @@ public class InstanceKlass {
     private short constantPoolCount;
     private ConstantPoolItem[] constantPoolItems;
 
-    private short accessFlag;
+    private short accessFlags;
     private short thisClass;
     private short superClass;
 
@@ -29,11 +29,20 @@ public class InstanceKlass {
     private short methodLength;
     private MethodInfo[] methods;
 
-    private short attributeLength;
-    private AttributeInfo[] attributeInfos;
-
     public void initConstantPool() {
-        this.constantPoolItems = new ConstantPoolItem[constantPoolCount];
+        this.constantPoolItems = new ConstantPoolItem[constantPoolCount - 1];
+    }
+
+    public void initInterfaceInfos() {
+        this.interfaceInfos = new InterfaceInfo[interfacesLength];
+    }
+
+    public void initFieldInfos() {
+        this.fields = new FieldInfo[fieldsLength];
+    }
+
+    public void initMethods() {
+        this.methods = new MethodInfo[methodLength];
     }
 
 }
