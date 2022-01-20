@@ -1,7 +1,11 @@
 package indi.yufr.jvm.yuShare.vm.oops.attribute;
 
+import indi.yufr.jvm.yuShare.byteCode.ByteCode;
 import indi.yufr.jvm.yuShare.vm.oops.AttributeAble;
+import indi.yufr.jvm.yuShare.vm.oops.ExceptionTableElement;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 public class CodeAttributeInfo extends AttributeInfo implements AttributeAble {
@@ -10,10 +14,14 @@ public class CodeAttributeInfo extends AttributeInfo implements AttributeAble {
     private short maxLocals;
 
     private int codeLength;
-    private byte[] code;
+
+    // 由于不确定个数,故使用list代替数组
+    private List<ByteCode> codes;
 
     // 暂时不处理异常
     private short exceptionTableLength;
+
+    private ExceptionTableElement[] exceptions;
 
     // 如局部变量表、操作数栈
     private short attributesCount;

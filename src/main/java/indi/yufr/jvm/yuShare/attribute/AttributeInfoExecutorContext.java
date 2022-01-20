@@ -6,7 +6,7 @@ import indi.yufr.jvm.yuShare.vm.oops.ConstantPoolItem;
 import indi.yufr.jvm.yuShare.vm.oops.InstanceKlass;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -16,10 +16,16 @@ import java.util.List;
 @Slf4j
 public class AttributeInfoExecutorContext {
 
-    private static List<AttributeInfoExecutor> attrExecutors = new ArrayList<>();
+    private static List<AttributeInfoExecutor> attrExecutors;
 
     static {
-        attrExecutors.add(new ConstantValueAttributeExecutor());
+        attrExecutors = Arrays.asList(
+                new CodeAttributeExecutor(),
+                new ConstantValueAttributeExecutor(),
+                new LineNumberTableAttributeExecutor(),
+                new LocalVariableTableAttributeExecutor(),
+                new SourceFileAttributeExecutor()
+        );
     }
 
     public static String parseAttrName(short attrNameIndex, InstanceKlass klass) {

@@ -38,8 +38,6 @@ public class ClassFileParser {
         klass.setMinorVersion(readU2(content, index));
 
         klass.setConstantPoolCount(readU2(content, index));
-        klass.initConstantPool();
-
         parseConstantPool(content, index, klass);
 
         // 解析本类的基础信息
@@ -56,20 +54,16 @@ public class ClassFileParser {
 
         // 解析字段信息
         klass.setFieldsLength(readU2(content, index));
-        klass.initFieldInfos();
 
         parseFieldInfo(content, index, klass);
 
         klass.setMethodLength(readU2(content, index));
-        klass.initMethods();
-
         parseMethodInfo(content, index, klass);
 
         klass.setAttributesCount(readU2(content, index));
-        klass.initAttributes();
 
         log.info("开始解析类本身的属性");
-        for (int i = 0; i < klass.getFieldsLength(); i++) {
+        for (int i = 0; i < klass.getAttributesCount(); i++) {
             parseAttribute(content, index, klass, klass);
         }
 
@@ -77,6 +71,8 @@ public class ClassFileParser {
     }
 
     private static void parseConstantPool(byte[] content, ByteIndex index, InstanceKlass klass) {
+
+        klass.initConstantPool();
 
         log.info("开始解析常量池");
 
@@ -97,6 +93,8 @@ public class ClassFileParser {
 
     private static void parseFieldInfo(byte[] content, ByteIndex index, InstanceKlass klass) {
 
+        klass.initFieldInfos();
+
         log.info("开始解析字段信息");
 
         for (int i = 0; i < klass.getFieldsLength(); i++) {
@@ -110,6 +108,7 @@ public class ClassFileParser {
     }
 
     private static void parseMethodInfo(byte[] content, ByteIndex index, InstanceKlass klass) {
+        klass.initMethods();
         log.info("开始解析方法信息");
 
         for (int i = 0; i < klass.getMethodLength(); i++) {
@@ -122,7 +121,9 @@ public class ClassFileParser {
         }
     }
 
-    private static void parseAttribute(byte[] content, ByteIndex index, InstanceKlass klass, AttributeAble attributeAble) {
+    public static void parseAttribute(byte[] content, ByteIndex index, InstanceKlass klass, AttributeAble attributeAble) {
+
+        attributeAble.initAttributes();
 
         log.info("解析相关属性");
 
@@ -138,7 +139,7 @@ public class ClassFileParser {
                 continue;
             }
 
-            AttributeInfo attributeInfo = executor.doParseInfo(content, index);
+            AttributeInfo attributeInfo = executor.doParse(content, index, klass);
             attributeAble.getAttributes()[j] = attributeInfo;
 
             log.info("第[{}]个属性,属性信息[{}]", j, attributeInfo);
@@ -151,7 +152,7 @@ public class ClassFileParser {
         fieldAndMethodAttribute.setNameIndex(readU2(content, index));
         fieldAndMethodAttribute.setDescriptorIndex(readU2(content, index));
         fieldAndMethodAttribute.setAttributesCount(readU2(content, index));
-        fieldAndMethodAttribute.initAttributes();
+
         return fieldAndMethodAttribute;
     }
 }

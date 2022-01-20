@@ -16,7 +16,7 @@ public class ConstantLongInfoExecutor extends ConstantInfoExecutor {
     @Override
     public boolean canSupport(ConstantTag tag) {
 
-        if (ConstantTag.JVM_CONSTANT_Integer.equals(tag)) {
+        if (ConstantTag.JVM_CONSTANT_Long.equals(tag)) {
             return true;
         }
         return false;

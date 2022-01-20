@@ -16,7 +16,7 @@ public class ConstantFloatInfoExecutor extends ConstantInfoExecutor {
     @Override
     public boolean canSupport(ConstantTag tag) {
 
-        if (ConstantTag.JVM_CONSTANT_Utf8.equals(tag)) {
+        if (ConstantTag.JVM_CONSTANT_Float.equals(tag)) {
             return true;
         }
         return false;

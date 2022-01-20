@@ -12,6 +12,12 @@ public class Stream {
     }
 
     public static byte[] readBytes(byte[] content, ByteIndex byteIndex, int length) {
+
+        // 自适应方法
+        if (length <= 0) {
+            return new byte[0];
+        }
+
         byte[] bytes = readByte(content, byteIndex.getIndex(), length);
         byteIndex.plus(length);
         return bytes;

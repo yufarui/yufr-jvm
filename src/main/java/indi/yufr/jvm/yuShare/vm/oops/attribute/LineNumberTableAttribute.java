@@ -15,7 +15,7 @@ public class LineNumberTableAttribute extends AttributeInfo {
 
     @Data
     public static class Item {
-        private int startPc;
-        private int lineNumber;
+        private short startPc;
+        private short lineNumber;
     }
 }

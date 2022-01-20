@@ -18,7 +18,6 @@ public class ConstantMetaRefExecutor extends ConstantInfoExecutor {
         if (ConstantTag.JVM_CONSTANT_Fieldref.equals(tag)
                 || ConstantTag.JVM_CONSTANT_Methodref.equals(tag)
                 || ConstantTag.JVM_CONSTANT_InterfaceMethodref.equals(tag)
-                || ConstantTag.JVM_CONSTANT_NameAndType.equals(tag)
         ) {
             return true;
         }

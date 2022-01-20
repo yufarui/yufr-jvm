@@ -1,5 +1,7 @@
 package indi.yufr.jvm.yuShare.util;
 
+import indi.yufr.jvm.yuShare.attribute.AttributeInfoExecutor;
+import indi.yufr.jvm.yuShare.byteCode.ByteCodeExecutor;
 import indi.yufr.jvm.yuShare.constant.executor.ConstantInfoExecutor;
 import indi.yufr.jvm.yuShare.constant.executor.ConstantInfoExecutorContext;
 import lombok.SneakyThrows;
@@ -16,7 +18,11 @@ import java.util.List;
 public class FindAllSubClass {
 
     public static void main(String[] args) {
-        listExecutor(ConstantInfoExecutor.class);
+//        listExecutor(ConstantInfoExecutor.class);
+
+        listExecutor(ByteCodeExecutor.class);
+
+        listExecutor(AttributeInfoExecutor.class);
     }
 
     @SneakyThrows
@@ -43,7 +49,7 @@ public class FindAllSubClass {
             }
         }
         String join = String.join(",\n", result);
-        System.out.println("Arrays.asList(" + join + ")");
+        System.out.println("Arrays.asList(\n" + join + "\n)");
 
     }
 }
