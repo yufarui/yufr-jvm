@@ -1,0 +1,54 @@
+package indi.yufr.jvm.share.util;
+
+import indi.yufr.jvm.share.attribute.AttributeInfoExecutor;
+import indi.yufr.jvm.share.byteCode.ByteCodeExecutor;
+import indi.yufr.jvm.share.constant.executor.ConstantInfoExecutorContext;
+import lombok.SneakyThrows;
+
+import java.io.File;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * @date: 2022/1/19 17:47
+ * @author: farui.yu
+ */
+public class FindAllSubClass {
+
+    public static void main(String[] args) {
+//        listExecutor(ConstantInfoExecutor.class);
+
+        listExecutor(ByteCodeExecutor.class);
+
+        listExecutor(AttributeInfoExecutor.class);
+    }
+
+    @SneakyThrows
+    private static void listExecutor(Class<?> superClazz) {
+
+        String name = superClazz.getPackage().getName();
+
+        String pathName = name.replace(".", "/");
+        URL resource = ConstantInfoExecutorContext.class.getResource("/" + pathName);
+
+        File file = new File(resource.getFile());
+        File[] files = file.listFiles();
+
+        List<String> result = new ArrayList<>();
+        for (File f : files) {
+            String className = f.getName();
+            String substring = className.substring(0, className.length() - ".class".length());
+            String realClassName = name + "." + substring;
+
+            Class<?> clazz = Class.forName(realClassName);
+
+            if (clazz.getSuperclass() == superClazz) {
+                result.add("new " + substring + "()");
+            }
+        }
+        String join = String.join(",\n", result);
+        System.out.println("Arrays.asList(\n" + join + "\n)");
+
+    }
+}

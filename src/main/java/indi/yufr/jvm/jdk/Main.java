@@ -1,8 +1,8 @@
 package indi.yufr.jvm.jdk;
 
 
-import indi.yufr.jvm.yuShare.vm.classFile.BootClassLoader;
-import indi.yufr.jvm.yuShare.vm.oops.InstanceKlass;
+import indi.yufr.jvm.share.vm.classFile.BootClassLoader;
+import indi.yufr.jvm.share.vm.oops.InstanceKlass;
 
 public class Main {
 
