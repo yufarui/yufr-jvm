@@ -102,3 +102,5 @@ https://gitee.com/yufarui/yufr-jvm[gitee地址]
 
 .字节码解析器代码示意图
 image::https://cdn.jsdelivr.net/gh/yufarui/simple_picture@main/jvm/classfile_parser_sequence.png[字节码解析器代码示意图]
+
+关于gitee 和 github 双同步设定
