@@ -14,6 +14,7 @@ public abstract class AbstractAttributeObject implements AttributeAble {
     private AttributeInfo[] attributes;
 
     public void initAttributes() {
+        // 防止重复加载
         this.attributes = new AttributeInfo[attributesCount];
     }
 

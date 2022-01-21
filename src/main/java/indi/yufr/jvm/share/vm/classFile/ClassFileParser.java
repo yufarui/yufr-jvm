@@ -123,9 +123,10 @@ public class ClassFileParser {
 
     public static void parseAttribute(byte[] content, ByteIndex index, InstanceKlass klass, AttributeAble attributeAble) {
 
-        attributeAble.initAttributes();
-
-        log.info("解析相关属性");
+        // 防止重复加载
+        if (attributeAble.getAttributes() == null) {
+            attributeAble.initAttributes();
+        }
 
         for (int j = 0; j < attributeAble.getAttributesCount(); j++) {
 
