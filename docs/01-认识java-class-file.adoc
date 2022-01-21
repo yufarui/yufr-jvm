@@ -890,6 +890,7 @@ signature_index::
 .类元信息的整体分析
 image::https://cdn.jsdelivr.net/gh/yufarui/simple_picture@main/jvm/meta_code_attributes.png[类元信息的整体分析]
 
+== 附注
 .插曲
 ****
 写这篇文章中,由于新买的电脑,使用还不是很熟练;

@@ -13,7 +13,6 @@
 :icons: font
 
 [preface]
-
 构建字节码解析器,为构建自己java版本的jvm做预热
 
 == 字节码解析器实战
@@ -103,4 +102,28 @@ https://gitee.com/yufarui/yufr-jvm[gitee地址]
 .字节码解析器代码示意图
 image::https://cdn.jsdelivr.net/gh/yufarui/simple_picture@main/jvm/classfile_parser_sequence.png[字节码解析器代码示意图]
 
-关于gitee 和 github 双同步设定
+== 附注
+
+.关于gitee 和 github 双同步设定
+****
+原本的项目是推送到github,应大家要求在,gitee上也推送了代码;
+
+我在github上是使用token来进行项目关联的; 在gitee上使用ssh-key,请确定你已经在gitee上创建了public-key;
+
+https://gitee.com/help/articles/4181#article-header0[官网中ssh-key-辅助文档]
+
+[source,bash]
+----
+#查看远程仓库的详情
+git remote -v
+
+#使用 ssh地址而非http地址
+git remote add gitee git@gitee.com:yufarui/yufr-jvm.git
+
+#可以推送了
+git push gitee main
+
+详细自己查看命令
+git remote -h
+----
+****
