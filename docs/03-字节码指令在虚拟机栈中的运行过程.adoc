@@ -1,0 +1,20 @@
+= 03-字节码指令在虚拟机栈中的运行过程
+:doctype: article
+:encoding: utf-8
+:lang: zh-cn
+:toc: left
+:toc-title: 导航目录
+:toclevels: 4
+:sectnums:
+:sectanchors:
+
+:hardbreaks:
+:experimental:
+:icons: font
+
+[preface]
+字节码解析器,已经构建完成; 重点来到字节码指令的执行;
+
+
+.字节码指令在虚拟机栈中的运行过程思考图
+image::https://cdn.jsdelivr.net/gh/yufarui/simple_picture@main/jvm/bytecode_instruction_running_process.png[]

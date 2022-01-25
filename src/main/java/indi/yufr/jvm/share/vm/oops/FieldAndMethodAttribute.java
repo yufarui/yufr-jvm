@@ -15,7 +15,7 @@ public class FieldAndMethodAttribute extends AbstractAttributeObject {
     private short descriptorIndex;
 
     // nameIndex 直接映射到 utf8
-    public String methodName(InstanceKlass instanceKlass) {
+    public String name(InstanceKlass instanceKlass) {
         ConstantPoolItem[] allItems = instanceKlass.getConstantPoolItems();
         ConstantPoolItem item = allItems[nameIndex - 1];
         return ((Utf8Info) item.getContent()).getContent();

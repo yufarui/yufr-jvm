@@ -1,24 +1,35 @@
 package indi.yufr.jvm.share.vm.utilities;
 
-public class BasicType {
+public enum BasicType {
 
-    public static final BasicType T_BOOLEAN = new BasicType(4);
-    public static final BasicType T_CHAR = new BasicType(5);
-    public static final BasicType T_FLOAT = new BasicType(6);
-    public static final BasicType T_DOUBLE = new BasicType(7);
-    public static final BasicType T_BYTE = new BasicType(8);
-    public static final BasicType T_SHORT = new BasicType(9);
-    public static final BasicType T_INT = new BasicType(10);
-    public static final BasicType T_LONG = new BasicType(11);
-    public static final BasicType T_OBJECT = new BasicType(12);
-    public static final BasicType T_ARRAY = new BasicType(13);
-    public static final BasicType T_VOID = new BasicType(14);
-    public static final BasicType T_ADDRESS = new BasicType(15);
-    public static final BasicType T_NARROWOOP = new BasicType(16);
-    public static final BasicType T_METADATA = new BasicType(17);
-    public static final BasicType T_NARROWKLASS = new BasicType(18);
-    public static final BasicType T_CONFLICT = new BasicType(19);
-    public static final BasicType T_ILLEGAL = new BasicType(99);
+    T_BOOLEAN(4),
+    T_CHAR(5),
+    T_FLOAT(6),
+    T_DOUBLE(7),
+    T_BYTE(8),
+    T_SHORT(9),
+    T_INT(10),
+    T_LONG(11),
+    T_OBJECT(12),
+    T_ARRAY(13),
+    T_VOID(14),
+    T_ADDRESS(15),
+    T_NARROWOOP(16),
+    T_METADATA(17),
+    T_NARROWKLASS(18),
+    T_CONFLICT(19),
+    T_ILLEGAL(99),
+    ;
+
+    BasicType(int type) {
+        this.type = type;
+    }
+
+    private int type;
+
+    public int getType() {
+        return type;
+    }
 
     public static int getTBoolean() {
         return T_BOOLEAN.getType();
@@ -195,19 +206,5 @@ public class BasicType {
         } else {
             return "ILLEGAL TYPE";
         }
-    }
-
-    //-- Internals only below this point
-    private BasicType() {
-    }
-
-    private BasicType(int type) {
-        this.type = type;
-    }
-
-    private int type;
-
-    public int getType() {
-        return type;
     }
 }

@@ -9,29 +9,29 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- *  根类加载器
+ * 根类加载器
  */
 @Data
 public class BootClassLoader {
 
     public static final String SUFFIX = ".class";
 
-    /**
-     *  该类加载器的加载路径
-     *      多个路径以分号分隔
-     *      只有一个的话，分号可省略
-     *
-     *  注意路径后面的斜杠不可丢
-     */
-    private static String searchPath = "C:\\yufr\\self-space\\yufr-jvm\\target\\classes\\";
+    private static String searchPath;
+
+    static {
+        searchPath = System.getProperty("user.dir")
+                + File.separator + "target"
+                + File.separator + "classes"
+                + File.separator;
+    }
 
     /**
-     *  用于存储该类加载器加载的所有类
+     * 用于存储该类加载器加载的所有类
      */
     private static Map<String, InstanceKlass> classLoaderData = new HashMap<>();
 
     /**
-     *  main函数所在的类在此保存一份引用，方便快速定位到
+     * main函数所在的类在此保存一份引用，方便快速定位到
      */
     private static InstanceKlass mainKlass = null;
 
