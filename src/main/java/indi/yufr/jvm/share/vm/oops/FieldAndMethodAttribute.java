@@ -30,4 +30,12 @@ public class FieldAndMethodAttribute extends AbstractAttributeObject {
         return ((Utf8Info) item.getContent()).getContent();
     }
 
+    @Override
+    public String toString() {
+        return "Attribute{" +
+                "accessFlags=" + accessFlags +
+                ", nameIndex=" + nameIndex +
+                ", descriptorIndex=" + descriptorIndex +
+                '}';
+    }
 }

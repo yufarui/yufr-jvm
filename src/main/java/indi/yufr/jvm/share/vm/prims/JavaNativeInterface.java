@@ -1,8 +1,10 @@
 package indi.yufr.jvm.share.vm.prims;
 
+import indi.yufr.jvm.share.byteCode.ByteCodeExecutorContext;
 import indi.yufr.jvm.share.vm.classFile.MethodDescriptor;
 import indi.yufr.jvm.share.vm.oops.InstanceKlass;
 import indi.yufr.jvm.share.vm.oops.MethodInfo;
+import indi.yufr.jvm.share.vm.oops.attribute.CodeAttributeInfo;
 import indi.yufr.jvm.share.vm.runtime.JavaThread;
 import indi.yufr.jvm.share.vm.runtime.JavaVFrame;
 import indi.yufr.jvm.share.vm.runtime.Threads;
@@ -56,6 +58,22 @@ public class JavaNativeInterface {
             log.info("\t 方法 [ " + methodInfo.name() + " ] 没有参数");
         }
 
+        // methodInfo 第一个attribute必定是 codeAttributeInfo
+        CodeAttributeInfo codeAttributeInfo = (CodeAttributeInfo) methodInfo.getAttributes()[0];
 
+        JavaVFrame frame = new JavaVFrame(codeAttributeInfo.getMaxLocals(), methodInfo);
+
+        if (null != prevFrame) {
+            for (int i = methodDescriptor.getParamsInfo().size() - 1; i >= 0; i--) {
+                frame.add(i, prevFrame.getStack().pop());
+            }
+        }
+
+        thread.getStack().push(frame);
+
+        log.info("第 " + thread.getStack().size() + " 个栈帧");
+
+        // 执行任务交给字节码解释器
+        ByteCodeExecutorContext.run(thread, methodInfo);
     }
 }

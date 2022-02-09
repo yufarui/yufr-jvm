@@ -63,6 +63,11 @@ public class DataTranslate {
         return bytes;
     }
 
+    /**
+     * 为了保留无符号的特性,使用int承接short
+     * @param bytes
+     * @return
+     */
     public static int byteToUnsignedShort(byte[] bytes) {
         int high = bytes[0];
         int low = bytes[1];

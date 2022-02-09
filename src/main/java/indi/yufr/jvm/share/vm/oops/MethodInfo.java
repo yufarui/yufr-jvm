@@ -22,7 +22,7 @@ public class MethodInfo extends FieldAndMethodAttribute {
         return descriptor;
     }
 
-    public List<DescriptorInfo> parseMethodParams(String descriptor) {
+    private List<DescriptorInfo> parseMethodParams(String descriptor) {
         int paramStartIndex = descriptor.indexOf('(');
         int paramEndIndex = descriptor.indexOf(')');
 
@@ -31,7 +31,7 @@ public class MethodInfo extends FieldAndMethodAttribute {
         return doParseDescriptor(paramsDescriptor);
     }
 
-    public DescriptorInfo parseMethodReturn(String descriptor) {
+    private DescriptorInfo parseMethodReturn(String descriptor) {
         int paramEndIndex = descriptor.indexOf(')');
 
         String paramsDescriptor = descriptor.substring(paramEndIndex + 1);
@@ -102,5 +102,6 @@ public class MethodInfo extends FieldAndMethodAttribute {
         }
         return new Tuple<>(arrayDescriptor, componentEnd);
     }
+
 
 }

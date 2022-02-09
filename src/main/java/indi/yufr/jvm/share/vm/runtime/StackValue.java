@@ -10,4 +10,11 @@ public class StackValue {
 
     private Object data;
 
+    public StackValue() {
+    }
+
+    public StackValue(BasicType basicType, Object data) {
+        this.basicType = basicType;
+        this.data = data;
+    }
 }
