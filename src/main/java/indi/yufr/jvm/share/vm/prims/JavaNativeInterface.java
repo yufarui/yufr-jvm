@@ -1,5 +1,6 @@
 package indi.yufr.jvm.share.vm.prims;
 
+import indi.yufr.jvm.share.vm.classFile.MethodDescriptor;
 import indi.yufr.jvm.share.vm.oops.InstanceKlass;
 import indi.yufr.jvm.share.vm.oops.MethodInfo;
 import indi.yufr.jvm.share.vm.runtime.JavaThread;
@@ -9,10 +10,6 @@ import indi.yufr.jvm.share.vm.utilities.AccessFlags;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
-/**
- * @Author: ziya
- * @Date: 2021/3/26 07:34
- */
 @Slf4j
 public class JavaNativeInterface {
 
@@ -20,8 +17,8 @@ public class JavaNativeInterface {
         MethodInfo[] methods = klass.getMethods();
 
         for (MethodInfo method : methods) {
-            String name = method.name(klass);
-            String descriptorName = method.descriptorName(klass);
+            String name = method.name();
+            String descriptorName = method.descriptorName();
 
             if (StringUtils.equals(name, methodName) && StringUtils.equals(descriptorName, paramsDescriptor)) {
                 return method;
@@ -29,7 +26,7 @@ public class JavaNativeInterface {
 
         }
 
-        log.error("没有找到方法 methodName[{}], paramsDescriptor[{}]", methodName, paramsDescriptor);
+        log.error("没有找到方法 methodName[{}], params Descriptor[{}]", methodName, paramsDescriptor);
         return null;
     }
 
@@ -44,7 +41,20 @@ public class JavaNativeInterface {
             throw new RuntimeException("非静态方法,调用失败");
         }
 
+        // 获取参数信息
+        MethodDescriptor methodDescriptor = methodInfo.methodDescriptorHandler();
 
+        if (methodDescriptor.getParamsInfo().size() != 0) {
+
+            if (0 != thread.getStack().size()) {
+                log.info("\t 从上一个栈帧取参数值");
+
+                prevFrame = (JavaVFrame) thread.getStack().peek();
+            }
+
+        } else {
+            log.info("\t 方法 [ " + methodInfo.name() + " ] 没有参数");
+        }
 
 
     }

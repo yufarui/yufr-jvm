@@ -1,7 +1,10 @@
 package indi.yufr.jvm.share.vm.classFile;
 
 import indi.yufr.jvm.share.vm.oops.DescriptorInfo;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
@@ -10,6 +13,9 @@ import java.util.List;
  * @author: farui.yu
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class MethodDescriptor {
 
     // 整体的描述符 如:([Ljava/lang/String;)V

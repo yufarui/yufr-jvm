@@ -14,12 +14,12 @@ public class JavaVFrame extends VFrame {
     /**
      * 模拟局部变量表
      */
-    private Stack<StackValue> container = new Stack<>();
+    private StackValue[] locals;
 
     /**
      * 模拟操作数栈
      */
-    private StackValue[] locals;
+    private Stack<StackValue> stack = new Stack<>();
 
     private MethodInfo ownerMethod;
 
@@ -29,15 +29,15 @@ public class JavaVFrame extends VFrame {
     }
 
     public void push(StackValue value) {
-        getContainer().push(value);
+        getStack().push(value);
     }
 
     public StackValue pop() {
-        return getContainer().pop();
+        return getStack().pop();
     }
 
     public StackValue peek() {
-        return getContainer().peek();
+        return getStack().peek();
     }
 
     public void add(int index, StackValue value) {

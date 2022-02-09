@@ -15,8 +15,24 @@ public class DescriptorInfo {
     // 针对数组类型,添加的额外维度
     private int arrayDimension;
 
+    // 针对数组 或 L对象的描述
+    private String typeDesc;
+
     public void incArrayDimension() {
         arrayDimension++;
     }
 
+    public static DescriptorInfo objectDesc(BasicType basicType, String typeDesc) {
+        DescriptorInfo descriptorInfo = new DescriptorInfo();
+        descriptorInfo.setType(basicType);
+        descriptorInfo.setTypeDesc(typeDesc);
+        return descriptorInfo;
+    }
+
+    public static DescriptorInfo simple(BasicType basicType) {
+
+        DescriptorInfo descriptorInfo = new DescriptorInfo();
+        descriptorInfo.setType(basicType);
+        return descriptorInfo;
+    }
 }

@@ -100,6 +100,7 @@ public class ClassFileParser {
         for (int i = 0; i < klass.getFieldsLength(); i++) {
 
             FieldAndMethodAttribute fieldInfo = parseFieldAndMethodAttribute(content, index, new FieldInfo());
+            fieldInfo.setBelongKlass(klass);
             log.info("第[{}]个字段,信息{}", i, fieldInfo);
             parseAttribute(content, index, klass, fieldInfo);
 
@@ -114,6 +115,8 @@ public class ClassFileParser {
         for (int i = 0; i < klass.getMethodLength(); i++) {
 
             FieldAndMethodAttribute methodInfo = parseFieldAndMethodAttribute(content, index, new MethodInfo());
+            methodInfo.setBelongKlass(klass);
+
             log.info("第[{}]个方法,信息{}", i, methodInfo);
             parseAttribute(content, index, klass, methodInfo);
 
