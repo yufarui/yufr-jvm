@@ -76,4 +76,8 @@ public class JavaNativeInterface {
         // 执行任务交给字节码解释器
         ByteCodeExecutorContext.run(thread, methodInfo);
     }
+
+    public static void callMethod(MethodInfo methodID) {
+
+    }
 }

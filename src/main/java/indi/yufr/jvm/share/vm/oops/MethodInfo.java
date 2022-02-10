@@ -22,7 +22,7 @@ public class MethodInfo extends FieldAndMethodAttribute {
         return descriptor;
     }
 
-    private List<DescriptorInfo> parseMethodParams(String descriptor) {
+    public static List<DescriptorInfo> parseMethodParams(String descriptor) {
         int paramStartIndex = descriptor.indexOf('(');
         int paramEndIndex = descriptor.indexOf(')');
 
@@ -31,7 +31,7 @@ public class MethodInfo extends FieldAndMethodAttribute {
         return doParseDescriptor(paramsDescriptor);
     }
 
-    private DescriptorInfo parseMethodReturn(String descriptor) {
+    public static DescriptorInfo parseMethodReturn(String descriptor) {
         int paramEndIndex = descriptor.indexOf(')');
 
         String paramsDescriptor = descriptor.substring(paramEndIndex + 1);
@@ -40,7 +40,7 @@ public class MethodInfo extends FieldAndMethodAttribute {
         return descriptorInfos.get(0);
     }
 
-    private List<DescriptorInfo> doParseDescriptor(String descriptor) {
+    private static List<DescriptorInfo> doParseDescriptor(String descriptor) {
 
         int index = 0;
         int length = descriptor.length();
@@ -71,7 +71,7 @@ public class MethodInfo extends FieldAndMethodAttribute {
         return descriptorInfos;
     }
 
-    private Tuple<DescriptorInfo, Integer> parseArrayTypeDesc(String paramsDescriptor, int startIndex) {
+    private static Tuple<DescriptorInfo, Integer> parseArrayTypeDesc(String paramsDescriptor, int startIndex) {
 
         DescriptorInfo arrayDescriptor = new DescriptorInfo();
         arrayDescriptor.setType(BasicType.T_ARRAY);
