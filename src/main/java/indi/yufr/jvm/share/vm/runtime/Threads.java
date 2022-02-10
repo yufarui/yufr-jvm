@@ -5,10 +5,6 @@ import lombok.Data;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @Author: ziya
- * @Date: 2021/3/26 14:12
- */
 @Data
 public class Threads {
 

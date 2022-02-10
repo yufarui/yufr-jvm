@@ -57,11 +57,9 @@ public class DescriptorInfo {
 
         for (int i = 0; i < methodParamsDes.size(); i++) {
             DescriptorInfo info = methodParamsDes.get(i);
-
             switch (info.getType()) {
                 case T_BOOLEAN:
                     types[i] = boolean.class;
-
                     break;
                 case T_CHAR:
                     types[i] = char.class;

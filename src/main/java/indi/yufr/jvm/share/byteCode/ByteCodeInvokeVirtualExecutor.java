@@ -58,7 +58,7 @@ public class ByteCodeInvokeVirtualExecutor extends ByteCodeExecutor {
             DescriptorInfo methodReturnDes = MethodInfo.parseMethodReturn(descriptorName);
 
             Object[] params = DescriptorInfo.parseMethodParams(methodParamsDes, frame);
-            Class[] paramsClass = DescriptorInfo.getParamsType(methodParamsDes);
+            Class<?>[] paramsClass = DescriptorInfo.getParamsType(methodParamsDes);
 
             Object stackValueData = frame.pop().getData();
 

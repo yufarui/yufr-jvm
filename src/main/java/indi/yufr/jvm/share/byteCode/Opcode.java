@@ -12,12 +12,12 @@ public enum Opcode {
 
     NOP((byte) 0x00, -1),
     ACONST_NULL((byte) 0x01, -1),
-    ICONST_0((byte) 0x03, -1),
-    ICONST_1((byte) 0x04, -1),
-    ICONST_2((byte) 0x05, -1),
-    ICONST_3((byte) 0x06, -1),
-    ICONST_4((byte) 0x07, -1),
-    ICONST_5((byte) 0x08, -1),
+    ICONST_0((byte) 0x03, 0),
+    ICONST_1((byte) 0x04, 0),
+    ICONST_2((byte) 0x05, 0),
+    ICONST_3((byte) 0x06, 0),
+    ICONST_4((byte) 0x07, 0),
+    ICONST_5((byte) 0x08, 0),
 
     DCONST_0((byte) 0x0e, -1),
     DCONST_1((byte) 0x0f, -1),
