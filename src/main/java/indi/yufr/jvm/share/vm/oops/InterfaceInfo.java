@@ -20,4 +20,5 @@ public class InterfaceInfo {
         ConstantPoolItem utf8Info = allItems[classInfoIndex];
         return ((Utf8Info) utf8Info.getContent()).getContent();
     }
+
 }

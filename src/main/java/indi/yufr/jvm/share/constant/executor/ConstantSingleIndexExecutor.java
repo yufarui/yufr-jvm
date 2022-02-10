@@ -1,7 +1,8 @@
 package indi.yufr.jvm.share.constant.executor;
 
+import indi.yufr.jvm.share.constant.content.ClassInfo;
 import indi.yufr.jvm.share.constant.content.ConstantContent;
-import indi.yufr.jvm.share.constant.content.SingleIndex;
+import indi.yufr.jvm.share.constant.content.StringInfo;
 import indi.yufr.jvm.share.tools.Stream;
 import indi.yufr.jvm.share.vm.classFile.ByteIndex;
 import indi.yufr.jvm.share.vm.utilities.ConstantTag;
@@ -26,8 +27,16 @@ public class ConstantSingleIndexExecutor extends ConstantInfoExecutor {
     @Override
     public ConstantContent doParseInfo(byte[] content, ByteIndex index) {
 
-        return SingleIndex.builder()
-                .index(Stream.readU2(content, index))
-                .build();
+        byte[] bytes = Stream.readOnly(content, index.getIndex() - 1, 1);
+
+        ConstantTag tag = ConstantTag.of(bytes[0]);
+
+        switch (tag) {
+            case JVM_CONSTANT_Class:
+                return new ClassInfo(Stream.readU2(content, index));
+            case JVM_CONSTANT_String:
+                return new StringInfo(Stream.readU2(content, index));
+        }
+        throw new RuntimeException("错误的tag");
     }
 }

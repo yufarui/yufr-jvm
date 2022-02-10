@@ -11,6 +11,10 @@ public class Stream {
         byteIndex.plus(length);
     }
 
+    public static byte[] readOnly(byte[] content, int startIndex, int length) {
+        return readByte(content, startIndex, length);
+    }
+
     public static byte[] readBytes(byte[] content, ByteIndex byteIndex, int length) {
 
         // 自适应方法
@@ -79,7 +83,6 @@ public class Stream {
                 return bytes[0];
             case 2:
                 buffer = ByteBuffer.wrap(bytes, 0, 2);
-                // 注意 byteOrder中定义的大端序 和 我们虚拟机规范中认识到的大端序 并不一致
                 buffer.order(ByteOrder.BIG_ENDIAN);
                 return buffer.getShort();
             case 4:

@@ -13,7 +13,25 @@
 :icons: font
 
 [preface]
-字节码解析器,已经构建完成; 重点来到字节码指令的执行;
+字节码解析器,已经构建完成; 重点来到字节码指令在栈帧中的执行;
+这次的目标是输出hello-world
+
+== 字节码指令在栈帧中的运行
+
+.对应的字节码指令
+[source]
+----
+0 getstatic #2 <java/lang/System.out : Ljava/io/PrintStream;>
+3 ldc #4 <Hello World>
+5 invokevirtual #5 <java/io/PrintStream.println : (Ljava/lang/String;)V>
+8 return
+----
 
 .字节码指令在虚拟机栈中的运行过程思考图
 image::https://cdn.jsdelivr.net/gh/yufarui/simple_picture@main/jvm/bytecode_instruction_running_process.png[]
+
+关于栈帧,我们简单地将其视为在线程中执行的方法即可;
+
+.字节码指令在虚拟机栈中的运行过程解析图
+image::https://cdn.jsdelivr.net/gh/yufarui/simple_picture@main/jvm/bytecode_instruction_running_explain.png[]
+
