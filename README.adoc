@@ -21,4 +21,8 @@ pass:[<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-a
 
 == 导航
 
-link:docs/01-认识java-class-file.adoc[01-认识java-class-file,window=_blank]
+link:docs/01-认识java-class-file.adoc[window=_blank]
+
+link:docs/02-构建自己的字节码解析器-partA.adoc[window=_blank]
+
+link:docs/03-字节码指令在虚拟机栈中的运行过程.adoc[window=_blank]
