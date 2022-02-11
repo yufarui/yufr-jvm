@@ -3,8 +3,10 @@ package indi.yufr.jvm.share.vm.classFile;
 import indi.yufr.jvm.share.attribute.AttributeInfoExecutor;
 import indi.yufr.jvm.share.attribute.AttributeInfoExecutorContext;
 import indi.yufr.jvm.share.constant.content.ConstantContent;
+import indi.yufr.jvm.share.constant.executor.ConstantDoubleInfoExecutor;
 import indi.yufr.jvm.share.constant.executor.ConstantInfoExecutor;
 import indi.yufr.jvm.share.constant.executor.ConstantInfoExecutorContext;
+import indi.yufr.jvm.share.constant.executor.ConstantLongInfoExecutor;
 import indi.yufr.jvm.share.tools.Stream;
 import indi.yufr.jvm.share.vm.oops.*;
 import indi.yufr.jvm.share.vm.oops.attribute.AttributeInfo;
@@ -78,12 +80,23 @@ public class ClassFileParser {
 
         // 解析常量池项, 注意长度
         // 注意 常量池的 index 实际上以1开始计算
+        ConstantInfoExecutor lastExecutor = null;
         for (int i = 0; i < klass.getConstantPoolCount() - 1; i++) {
+
+            if (lastExecutor instanceof ConstantLongInfoExecutor
+                    || lastExecutor instanceof ConstantDoubleInfoExecutor) {
+                // 不解析直接跳过
+                klass.getConstantPoolItems()[i] = null;
+                lastExecutor = ConstantInfoExecutorContext.skipExecutor;
+                continue;
+            }
+
             byte tag = readU1(content, index);
             ConstantTag constantTag = ConstantTag.of(tag);
             ConstantPoolItem constantPoolItem = new ConstantPoolItem(constantTag);
-            ConstantInfoExecutor executor = ConstantInfoExecutorContext.findExecutor(constantTag);
-            ConstantContent constantContent = executor.doParseInfo(content, index);
+            lastExecutor = ConstantInfoExecutorContext.findExecutor(constantTag);
+
+            ConstantContent constantContent = lastExecutor.doParseInfo(content, index);
             constantPoolItem.setContent(constantContent);
 
             klass.getConstantPoolItems()[i] = constantPoolItem;

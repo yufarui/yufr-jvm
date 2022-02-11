@@ -4,6 +4,10 @@ import lombok.Getter;
 
 /**
  * 字节码操作的助记符
+ * <p>
+ * idea中快手替换的正则记录
+ * public static final int (.*) = (.*);\s+// (.*)
+ * $1\(\(byte\) $3, 0\),
  *
  * @date: 2022/1/20 9:28
  * @author: farui.yu
@@ -26,66 +30,80 @@ public enum Opcode {
     SIPUSH((byte) 0x11, -1),
 
     LDC((byte) 0x12, 1),
-    LDC_W((byte) 0x13, -1),
-    LDC2_W((byte) 0x14, -1),
+    LDC_W((byte) 0x13, 2),
+    LDC2_W((byte) 0x14, 2),
 
-    ILOAD((byte) 0x15, -1),
+    ILOAD((byte) 0x15, 0),
 
-    ILOAD_0((byte) 0x1a, -1),
-    ILOAD_1((byte) 0x1b, -1),
-    ILOAD_2((byte) 0x1c, -1),
-    ILOAD_3((byte) 0x1d, -1),
+    ILOAD_0((byte) 0x1a, 0),
+    ILOAD_1((byte) 0x1b, 0),
+    ILOAD_2((byte) 0x1c, 0),
+    ILOAD_3((byte) 0x1d, 0),
 
-    FLOAD_0((byte) 0x22, -1),
-    FLOAD_1((byte) 0x23, -1),
-    FLOAD_2((byte) 0x24, -1),
-    FLOAD_3((byte) 0x25, -1),
+    LLOAD_0((byte) 0x1e, 0),
+    LLOAD_1((byte) 0x1f, 0),
+    LLOAD_2((byte) 0x20, 0),
+    LLOAD_3((byte) 0x21, 0),
 
-    DLOAD_0((byte) 0x26, -1),
-    DLOAD_1((byte) 0x27, -1),
-    DLOAD_2((byte) 0x28, -1),
-    DLOAD_3((byte) 0x29, -1),
+    FLOAD_0((byte)0x22, 0),
+    FLOAD_1((byte)0x23, 0),
+    FLOAD_2((byte)0x24, 0),
+    FLOAD_3((byte)0x25, 0),
+
+    DLOAD_0((byte)0x26, 0),
+    DLOAD_1((byte)0x27, 0),
+    DLOAD_2((byte)0x28, 0),
+    DLOAD_3((byte)0x29, 0),
 
     ALOAD_0((byte) 0x2a, 0),
     ALOAD_1((byte) 0x2b, 0),
     ALOAD_2((byte) 0x2c, 0),
     ALOAD_3((byte) 0x2d, 0),
 
-    IALOAD((byte) 0x2e, -1),
-    LALOAD((byte) 0x2f, -1),
-    FALOAD((byte) 0x30, -1),
-    DALOAD((byte) 0x31, -1),
-    AALOAD((byte) 0x32, -1),
-    BALOAD((byte) 0x33, -1),
-    CALOAD((byte) 0x34, -1),
-    SALOAD((byte) 0x35, -1),
+    IALOAD((byte)0x2e, 0),
+    LALOAD((byte)0x2f, 0),
+    FALOAD((byte)0x30, 0),
+    DALOAD((byte)0x31, 0),
+    AALOAD((byte)0x32, 0),
+    BALOAD((byte)0x33, 0),
+    CALOAD((byte)0x34, 0),
+    SALOAD((byte)0x35, 0),
 
-    DSTORE((byte) 0x39, -1),
+    ISTORE((byte) 0x36, 0),
+    LSTORE((byte) 0x37, 0),
+    FSTORE((byte) 0x38, 0),
+    DSTORE((byte) 0x39, 0),
+    ASTORE((byte) 0x3a, 0),
 
-    ISTORE_0((byte) 0x3b, -1),
-    ISTORE_1((byte) 0x3c, -1),
-    ISTORE_2((byte) 0x3d, -1),
-    ISTORE_3((byte) 0x3e, -1),
+    ISTORE_0((byte) 0x3b, 0),
+    ISTORE_1((byte) 0x3c, 0),
+    ISTORE_2((byte) 0x3d, 0),
+    ISTORE_3((byte) 0x3e, 0),
 
-    FSTORE_0((byte) 0x43, -1),
-    FSTORE_1((byte) 0x44, -1),
-    FSTORE_2((byte) 0x45, -1),
-    FSTORE_3((byte) 0x46, -1),
+    LSTORE_0((byte) 0x3f, 0),
+    LSTORE_1((byte) 0x40, 0),
+    LSTORE_2((byte) 0x41, 0),
+    LSTORE_3((byte) 0x42, 0),
 
-    DSTORE_0((byte) 0x47, -1),
-    DSTORE_1((byte) 0x48, -1),
-    DSTORE_2((byte) 0x49, -1),
-    DSTORE_3((byte) 0x4a, -1),
+    FSTORE_0((byte) 0x43, 0),
+    FSTORE_1((byte) 0x44, 0),
+    FSTORE_2((byte) 0x45, 0),
+    FSTORE_3((byte) 0x46, 0),
 
-    ASTORE_0((byte) 0x4b, -1),
-    ASTORE_1((byte) 0x4c, -1),
-    ASTORE_2((byte) 0x4d, -1),
-    ASTORE_3((byte) 0x4e, -1),
-    IASTORE((byte) 0x4f, -1),
-    LASTORE((byte) 0x50, -1),
-    FASTORE((byte) 0x51, -1),
-    DASTORE((byte) 0x52, -1),
-    AASTORE((byte) 0x53, -1),
+    DSTORE_0((byte) 0x47, 0),
+    DSTORE_1((byte) 0x48, 0),
+    DSTORE_2((byte) 0x49, 0),
+    DSTORE_3((byte) 0x4a, 0),
+
+    ASTORE_0((byte) 0x4b, 0),
+    ASTORE_1((byte) 0x4c, 0),
+    ASTORE_2((byte) 0x4d, 0),
+    ASTORE_3((byte) 0x4e, 0),
+    IASTORE((byte) 0x4f, 0),
+    LASTORE((byte) 0x50, 0),
+    FASTORE((byte) 0x51, 0),
+    DASTORE((byte) 0x52, 0),
+    AASTORE((byte) 0x53, 0),
 
     DUP((byte) 0x59, -1),
 
@@ -97,9 +115,23 @@ public enum Opcode {
     IINC((byte) 0x84, -1),
 
     /**
-     * 将栈顶short类型强制转为double类型，并将结果压入栈
+     * 类型转换
      */
-    I2D((byte) 0x87, -1),
+    I2D((byte) 0x87, 0),
+    I2L((byte) 0x85, 0),
+    I2F((byte) 0x86, 0),
+    L2I((byte) 0x88, 0),
+    L2F((byte) 0x89, 0),
+    L2D((byte) 0x8a, 0),
+    F2I((byte) 0x8b, 0),
+    F2L((byte) 0x8c, 0),
+    F2D((byte) 0x8d, 0),
+    D2I((byte) 0x8e, 0),
+    D2L((byte) 0x8f, 0),
+    D2F((byte) 0x90, 0),
+    I2B((byte) 0x91, 0),
+    I2C((byte) 0x92, 0),
+    I2S((byte) 0x93, 0),
 
     IF_ICMPEQ((byte) 0x9f, -1),
     IF_ICMPNE((byte) 0xa0, -1),
@@ -162,7 +194,7 @@ public enum Opcode {
             }
         }
 
-        throw new RuntimeException("无法解析tag");
+        throw new RuntimeException("无法解析opcode" + opcode);
     }
 
 }

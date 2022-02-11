@@ -20,12 +20,14 @@ public class ByteCodeExecutorContext {
 
     static {
         byteCodeExecutors = Arrays.asList(
-                new ByteCodeALoadExecutor(),
+                new ByteCodeClassCastExecutor(),
                 new ByteCodeGetStaticExecutor(),
                 new ByteCodeInvokeSpecialExecutor(),
                 new ByteCodeInvokeVirtualExecutor(),
                 new ByteCodeLdcExecutor(),
-                new ByteCodeReturnExecutor()
+                new ByteCodeReturnExecutor(),
+                new ByteCodeLoadExecutor(),
+                new ByteCodeStoreExecutor()
         );
     }
 
@@ -60,6 +62,10 @@ public class ByteCodeExecutorContext {
 
         String name = opcode.name();
         int index = name.lastIndexOf("_");
+
+        if (index == -1) {
+            return -1;
+        }
 
         String opcodeEnd = name.substring(index + 1);
         return Integer.parseInt(opcodeEnd);

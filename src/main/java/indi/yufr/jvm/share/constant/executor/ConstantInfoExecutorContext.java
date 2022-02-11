@@ -14,6 +14,8 @@ public class ConstantInfoExecutorContext {
 
     private static List<ConstantInfoExecutor> constantInfoExecutors;
 
+    public final static ConstantSkipExecutor skipExecutor = new ConstantSkipExecutor();
+
     static {
         constantInfoExecutors = Arrays.asList(
                 new ConstantDoubleInfoExecutor(),

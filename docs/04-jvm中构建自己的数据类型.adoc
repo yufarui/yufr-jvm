@@ -1,0 +1,20 @@
+= 03-字节码指令在虚拟机栈中的运行过程
+:doctype: article
+:encoding: utf-8
+:lang: zh-cn
+:toc: left
+:toc-title: 导航目录
+:toclevels: 4
+:sectnums:
+:sectanchors:
+
+:hardbreaks:
+:experimental:
+:icons: font
+
+[preface]
+
+
+
+.大端序与小端序的解释
+image::https://cdn.jsdelivr.net/gh/yufarui/simple_picture@main/jvm/endian_explian.png[]

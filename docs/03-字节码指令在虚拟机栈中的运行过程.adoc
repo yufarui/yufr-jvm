@@ -35,3 +35,22 @@ image::https://cdn.jsdelivr.net/gh/yufarui/simple_picture@main/jvm/bytecode_inst
 .字节码指令在虚拟机栈中的运行过程解析图
 image::https://cdn.jsdelivr.net/gh/yufarui/simple_picture@main/jvm/bytecode_instruction_running_explain.png[]
 
+.输出hello World的过程解析
+****
+getstatic::
+1.取静态属性
+2.压入线程栈
+
+ldc::
+1.从常量池中取常量
+2.将常量压入栈
+
+invokevirtual::
+1.构建运行环境,创建栈帧,参数出栈,给this指针赋值
+2.执行方法
+jdk字段的(默认使用反射)
+自定义的方法(使用自己的类加载器处理)
+
+return::
+1.清理栈帧
+****

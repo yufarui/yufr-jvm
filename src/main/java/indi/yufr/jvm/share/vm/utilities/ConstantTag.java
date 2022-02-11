@@ -21,6 +21,8 @@ public enum ConstantTag {
     JVM_CONSTANT_MethodType(16),  // JSR 292
     // static final int JVM_CONSTANT_(unused)(17), // JSR 292 early drafts only
     JVM_CONSTANT_InvokeDynamic(18),  // JSR 292
+    // 自定义的
+    JVM_SKIP(-1),
     ;
 
     @Getter

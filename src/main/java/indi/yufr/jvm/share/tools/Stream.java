@@ -97,18 +97,18 @@ public class Stream {
     // 大端序 和 小端序的测试
     public static void main(String[] args) {
         byte[] bytes = new byte[4];
-        bytes[3] = (byte) 0xca;
-        bytes[2] = (byte) 0xfe;
-        bytes[1] = (byte) 0xba;
-        bytes[0] = (byte) 0xbe;
+        bytes[0] = (byte) 0xca;
+        bytes[1] = (byte) 0xfe;
+        bytes[2] = (byte) 0xba;
+        bytes[3] = (byte) 0xbe;
+        // -889275714
         int x = 0xca_fe_ba_be;
         int y = 0xbe_ba_fe_ca;
         System.out.println(x);
         System.out.println(y);
         System.out.println(readInOrder(bytes));
 
-        System.out.println(0xca);
-        System.out.println((byte) 0xca);
+        System.out.println((char)(0x4e0d));
     }
 
 }
