@@ -75,7 +75,7 @@ public class CodeAttributeExecutor extends AttributeInfoExecutor {
             ByteCodeExecutor executor = ByteCodeExecutorContext.findExecutor(opcode);
 
             if (executor == null) {
-                result.add(new ByteCode(opcode));
+                result.add(new ByteCode(index.getIndex() - 1, opcode));
                 if (opcode.getOpNum() == -1) {
                     throw new RuntimeException("还未能解析的opcode: " + opcode.name());
                 }

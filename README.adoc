@@ -26,3 +26,7 @@ link:docs/01-认识java-class-file.adoc[window=_blank]
 link:docs/02-构建自己的字节码解析器-partA.adoc[window=_blank]
 
 link:docs/03-字节码指令在虚拟机栈中的运行过程.adoc[window=_blank]
+
+link:docs/04-让jvm可以进行计算.adoc[window=_blank]
+
+link:docs/05-让jvm支持流程控制.adoc[window=_blank]

@@ -69,7 +69,7 @@ public class Stream {
         return result;
     }
 
-    private static Object readInOrder(byte[] bytes) {
+    public static Object readInOrder(byte[] bytes) {
 
         if (bytes == null || bytes.length == 0) {
             throw new RuntimeException("数组长度错误");
@@ -108,7 +108,7 @@ public class Stream {
         System.out.println(y);
         System.out.println(readInOrder(bytes));
 
-        System.out.println((char)(0x4e0d));
+        System.out.println((char) (0x4e0d));
     }
 
 }

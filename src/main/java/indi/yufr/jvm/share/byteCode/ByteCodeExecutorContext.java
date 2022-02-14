@@ -1,6 +1,7 @@
 package indi.yufr.jvm.share.byteCode;
 
 import indi.yufr.jvm.share.byteCode.arithmethic.*;
+import indi.yufr.jvm.share.vm.classFile.ByteIndex;
 import indi.yufr.jvm.share.vm.oops.InstanceKlass;
 import indi.yufr.jvm.share.vm.oops.MethodInfo;
 import indi.yufr.jvm.share.vm.oops.attribute.CodeAttributeInfo;
@@ -10,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @date: 2022/1/20 9:54
@@ -28,6 +31,7 @@ public class ByteCodeExecutorContext {
                 new ByteCodeRemExecutor(),
                 new ByteCodeSubExecutor(),
                 new ByteCodeBiPushExecutor(),
+                new ByteCodeSiPushExecutor(),
                 new ByteCodeClassCastExecutor(),
                 new ByteCodeGetStaticExecutor(),
                 new ByteCodeInvokeSpecialExecutor(),
@@ -59,12 +63,19 @@ public class ByteCodeExecutorContext {
 
         List<ByteCode> codes = attribute.getCodes();
 
+        Map<Integer, ByteCode> collect = codes.stream()
+                .collect(Collectors.toMap(ByteCode::getCursor, (byteCode -> byteCode)));
+
         InstanceKlass belongKlass = method.getBelongKlass();
 
-        for (ByteCode byteCode : codes) {
+        // 变更策略,不能按顺序执行 byteCode,流程控制需要控制游标
+        ByteIndex byteIndex = new ByteIndex();
+
+        while (byteIndex.getIndex() < attribute.getCodeLength()) {
+            ByteCode byteCode = collect.get(byteIndex.getIndex());
             ByteCodeExecutor executor = ByteCodeExecutorContext.findExecutor(byteCode.getOpcode());
             assert executor != null;
-            executor.execute(thread, belongKlass, byteCode);
+            executor.execute(thread, belongKlass, byteCode, byteIndex);
         }
     }
 
@@ -93,6 +104,11 @@ public class ByteCodeExecutorContext {
         if (type == 'L') {
             type = 'J';
         }
+
+        if (type == 'A') {
+            type = 'L';
+        }
+
         return BasicType.charToBasicType(type);
     }
 

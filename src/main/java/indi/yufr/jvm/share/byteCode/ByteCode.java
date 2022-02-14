@@ -13,16 +13,21 @@ import lombok.Data;
 @AllArgsConstructor
 public class ByteCode {
 
+    // 不开启的属性
+    // private CodeAttributeInfo belongAttribute;
+
+    // 当前byteCode所在游标
+    private int cursor;
     private Opcode opcode;
 
-    // 操作数对应常量池中index
-    // 统一使用short 表示index, 但是此处的index 只读取一位Stream.readU1
+    // 指令 对应的实际 操作数
     private byte[] content;
 
     public ByteCode() {
     }
 
-    public ByteCode(Opcode opcode) {
+    public ByteCode(int cursor, Opcode opcode) {
+        this.cursor = cursor;
         this.opcode = opcode;
     }
 }

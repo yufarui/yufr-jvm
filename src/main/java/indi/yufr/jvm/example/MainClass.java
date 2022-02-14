@@ -35,6 +35,14 @@ public class MainClass {
 
         int a = (x + y) * z;
         System.out.println(a);
+
+        if (a > 300 && a < 500) {
+            System.out.println(true);
+        }
+
+        for (int j = 0; j < 3; j++) {
+            System.out.println(j);
+        }
     }
 
 }
