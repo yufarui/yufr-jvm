@@ -31,9 +31,7 @@ public class ByteCodeLoadExecutor extends ByteCodeExecutor {
         JavaVFrame frame = (JavaVFrame) thread.getStack().peek();
 
         Opcode opcode = byteCode.getOpcode();
-        String name = opcode.name();
-        int index = name.indexOf("LOAD");
-        String prefix = name.substring(0, index);
+        String prefix = ByteCodeExecutorContext.parseByteCodePrefix(opcode, "LOAD");
         int suffix = ByteCodeExecutorContext.parseByteCodeLastNum(byteCode.getOpcode());
 
         StackValue local;

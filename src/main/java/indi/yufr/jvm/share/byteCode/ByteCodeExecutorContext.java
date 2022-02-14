@@ -1,9 +1,11 @@
 package indi.yufr.jvm.share.byteCode;
 
+import indi.yufr.jvm.share.byteCode.arithmethic.*;
 import indi.yufr.jvm.share.vm.oops.InstanceKlass;
 import indi.yufr.jvm.share.vm.oops.MethodInfo;
 import indi.yufr.jvm.share.vm.oops.attribute.CodeAttributeInfo;
 import indi.yufr.jvm.share.vm.runtime.JavaThread;
+import indi.yufr.jvm.share.vm.utilities.BasicType;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
@@ -20,13 +22,20 @@ public class ByteCodeExecutorContext {
 
     static {
         byteCodeExecutors = Arrays.asList(
+                new ByteCodeAddExecutor(),
+                new ByteCodeDivExecutor(),
+                new ByteCodeMulExecutor(),
+                new ByteCodeRemExecutor(),
+                new ByteCodeSubExecutor(),
+                new ByteCodeBiPushExecutor(),
                 new ByteCodeClassCastExecutor(),
                 new ByteCodeGetStaticExecutor(),
                 new ByteCodeInvokeSpecialExecutor(),
                 new ByteCodeInvokeVirtualExecutor(),
                 new ByteCodeLdcExecutor(),
-                new ByteCodeReturnExecutor(),
                 new ByteCodeLoadExecutor(),
+                new ByteCodeMinusExecutor(),
+                new ByteCodeReturnExecutor(),
                 new ByteCodeStoreExecutor()
         );
     }
@@ -58,6 +67,14 @@ public class ByteCodeExecutorContext {
         }
     }
 
+    protected static String parseByteCodePrefix(Opcode opcode, String keyword) {
+
+        String name = opcode.name();
+
+        int index = name.indexOf(keyword);
+        return name.substring(0, index);
+    }
+
     protected static int parseByteCodeLastNum(Opcode opcode) {
 
         String name = opcode.name();
@@ -69,6 +86,13 @@ public class ByteCodeExecutorContext {
 
         String opcodeEnd = name.substring(index + 1);
         return Integer.parseInt(opcodeEnd);
+    }
+
+    public static BasicType cast(char type) {
+        if (type == 'L') {
+            type = 'J';
+        }
+        return BasicType.charToBasicType(type);
     }
 
 }

@@ -9,6 +9,7 @@ import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @date: 2022/1/19 17:47
@@ -32,23 +33,42 @@ public class FindAllSubClass {
         String pathName = name.replace(".", "/");
         URL resource = ConstantInfoExecutorContext.class.getResource("/" + pathName);
 
-        File file = new File(resource.getFile());
-        File[] files = file.listFiles();
-
         List<String> result = new ArrayList<>();
-        for (File f : files) {
-            String className = f.getName();
-            String substring = className.substring(0, className.length() - ".class".length());
-            String realClassName = name + "." + substring;
 
-            Class<?> clazz = Class.forName(realClassName);
+        File file = new File(resource.getFile());
+        parse(superClazz, name, result, file);
 
-            if (clazz.getSuperclass() == superClazz) {
-                result.add("new " + substring + "()");
-            }
-        }
         String join = String.join(",\n", result);
         System.out.println("Arrays.asList(\n" + join + "\n)");
 
+    }
+
+    private static void parse(Class<?> superClazz, String name, List<String> result, File file) {
+
+        if (file.isDirectory()) {
+            for (File f : Objects.requireNonNull(file.listFiles())) {
+                parse(superClazz, name, result, f);
+            }
+        } else {
+            doParse(superClazz, name, result, file);
+        }
+
+    }
+
+    @SneakyThrows
+    private static void doParse(Class<?> superClazz, String name, List<String> result, File f) {
+        String className = f.getName();
+        String substring = className.substring(0, className.length() - ".class".length());
+        String realClassName = name + "." + substring;
+
+        if (realClassName.contains("$")) {
+            return;
+        }
+
+        Class<?> clazz = Class.forName(realClassName);
+
+        if (clazz.getSuperclass() == superClazz) {
+
+        }
     }
 }

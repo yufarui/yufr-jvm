@@ -33,9 +33,7 @@ public class ByteCodeStoreExecutor extends ByteCodeExecutor {
         JavaVFrame frame = (JavaVFrame) thread.getStack().peek();
 
         Opcode opcode = byteCode.getOpcode();
-        String name = opcode.name();
-        int index = name.indexOf("STORE");
-        String prefix = name.substring(0, index);
+        String prefix = ByteCodeExecutorContext.parseByteCodePrefix(opcode, "STORE");
         int suffix = ByteCodeExecutorContext.parseByteCodeLastNum(byteCode.getOpcode());
         byte[] content = byteCode.getContent();
 

@@ -65,16 +65,8 @@ public class ByteCodeClassCastExecutor extends ByteCodeExecutor {
         char first = name.substring(0, 1).charAt(0);
         char second = name.substring(2).charAt(0);
 
-        if (first == 'L') {
-            first = 'J';
-        }
-
-        if (second == 'L') {
-            second = 'J';
-        }
-
-        return new Tuple<>(BasicType.charToBasicType(first),
-                BasicType.charToBasicType(second));
+        return new Tuple<>(ByteCodeExecutorContext.cast(first),
+                ByteCodeExecutorContext.cast(second));
     }
 
 }
