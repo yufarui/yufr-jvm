@@ -23,6 +23,13 @@ public enum Opcode {
     ICONST_4((byte) 0x07, 0),
     ICONST_5((byte) 0x08, 0),
 
+    LCONST_0((byte) 0x09, -1),
+    LCONST_1((byte) 0x0a, -1),
+
+    FCONST_0((byte) 0x0b, 0),
+    FCONST_1((byte) 0x0c, 0),
+    FCONST_2((byte) 0x0d, 0),
+
     DCONST_0((byte) 0x0e, -1),
     DCONST_1((byte) 0x0f, -1),
 
@@ -136,7 +143,7 @@ public enum Opcode {
     FREM((byte) 0x72, 0),
     DREM((byte) 0x73, 0),
     
-    IINC((byte) 0x84, -1),
+    IINC((byte) 0x84, 2),
 
     /**
      * 类型转换

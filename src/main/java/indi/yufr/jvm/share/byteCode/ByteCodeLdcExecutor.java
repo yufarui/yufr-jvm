@@ -47,7 +47,10 @@ public class ByteCodeLdcExecutor extends ByteCodeExecutor {
 
         JavaVFrame frame = (JavaVFrame) thread.getStack().peek();
 
-        if (constantContent instanceof FloatInfo) {
+        if (constantContent instanceof IntegerInfo) {
+            int n = ((IntegerInfo) constantContent).getContent();
+            frame.push(new StackValue(BasicType.T_INT, n));
+        } else if (constantContent instanceof FloatInfo) {
             float f = ((FloatInfo) constantContent).getContent();
             frame.push(new StackValue(BasicType.T_FLOAT, f));
         } else if (constantContent instanceof StringInfo) {

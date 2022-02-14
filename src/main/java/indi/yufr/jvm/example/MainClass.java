@@ -18,11 +18,23 @@ public class MainClass {
         int num1 = 10;
         int num2 = 12;
 
-//        System.out.println(num1++);
         System.out.println(num1 + num2);
         System.out.println(num2 - num1);
         System.out.println(num2 * num1);
         System.out.println(num2 / num1);
+
+        System.out.println(num1++);
+        System.out.println(--num1);
+
+        System.out.println(num1 += 0x7f00_0000);
+
+        // 优先级
+        int x = 100;
+        int y = 2;
+        int z = 3;
+
+        int a = (x + y) * z;
+        System.out.println(a);
     }
 
 }

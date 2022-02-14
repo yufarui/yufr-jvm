@@ -32,9 +32,10 @@ public class ByteCodeExecutorContext {
                 new ByteCodeGetStaticExecutor(),
                 new ByteCodeInvokeSpecialExecutor(),
                 new ByteCodeInvokeVirtualExecutor(),
+                new ByteCodeIINCExecutor(),
+                new ByteCodeConstExecutor(),
                 new ByteCodeLdcExecutor(),
                 new ByteCodeLoadExecutor(),
-                new ByteCodeMinusExecutor(),
                 new ByteCodeReturnExecutor(),
                 new ByteCodeStoreExecutor()
         );
