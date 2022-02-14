@@ -28,7 +28,7 @@ public class MainClass {
 
         System.out.println(num1 += 0x7f00_0000);
 
-        // 优先级
+        // 优先级 由编译器控制
         int x = 100;
         int y = 2;
         int z = 3;

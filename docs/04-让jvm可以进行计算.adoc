@@ -13,15 +13,12 @@
 :icons: font
 
 [preface]
-
-
+简单化处理数据类型; 这节课,以运算为载体,更加熟练指令的运行;
 
 .大端序与小端序的解释
 image::https://cdn.jsdelivr.net/gh/yufarui/simple_picture@main/jvm/endian_explian.png[]
 
-i++
---i
-i+=2
-i+=0x7f00_000_0000_0001
+.代码i++运行解析图
+image::https://cdn.jsdelivr.net/gh/yufarui/simple_picture@main/jvm/i++_runing_explain.png[]
 
-优先级
+运算符优先级 编译系统做的事情!

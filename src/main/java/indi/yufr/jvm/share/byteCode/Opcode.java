@@ -164,6 +164,19 @@ public enum Opcode {
     I2C((byte) 0x92, 0),
     I2S((byte) 0x93, 0),
 
+    LCMP((byte) 0x94, 0),
+    FCMPL((byte) 0x95, 0),
+    FCMPG((byte) 0x96, 0),
+    DCMPL((byte) 0x97, 0),
+    DCMPG((byte) 0x98, 0),
+    
+    IFEQ((byte) 0x99, 0),
+    IFNE((byte) 0x9a, 0),
+    IFLT((byte) 0x9b, 0),
+    IFGE((byte) 0x9c, 0),
+    IFGT((byte) 0x9d, 0),
+    IFLE((byte) 0x9e, 0),
+
     IF_ICMPEQ((byte) 0x9f, -1),
     IF_ICMPNE((byte) 0xa0, -1),
     IF_ICMPLT((byte) 0xa1, -1),
