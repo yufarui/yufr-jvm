@@ -28,6 +28,7 @@ public class ByteCodeBiPushExecutor extends ByteCodeExecutor {
         byte[] content = byteCode.getContent();
         int val = content[0];
 
+        // 虽然 bipush 处理的是 byte,但这里暗含了转换
         frame.push(new StackValue(BasicType.T_INT, val));
     }
 }

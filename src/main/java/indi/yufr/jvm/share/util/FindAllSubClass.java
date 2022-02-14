@@ -65,10 +65,16 @@ public class FindAllSubClass {
             return;
         }
 
-        Class<?> clazz = Class.forName(realClassName);
+        Class<?> clazz = null;
+        try {
+            clazz = Class.forName(realClassName);
+        } catch (ClassNotFoundException e) {
+            result.add("new " + substring + "()");
+            return;
+        }
 
         if (clazz.getSuperclass() == superClazz) {
-
+            result.add("new " + substring + "()");
         }
     }
 }
