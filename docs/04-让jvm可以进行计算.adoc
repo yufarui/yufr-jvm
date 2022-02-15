@@ -1,4 +1,4 @@
-= 03-字节码指令在虚拟机栈中的运行过程
+= 04-让jvm可以进行计算
 :doctype: article
 :encoding: utf-8
 :lang: zh-cn

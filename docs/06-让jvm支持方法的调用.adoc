@@ -1,4 +1,4 @@
-= 05-让jvm支持流程控制
+= 06-让jvm支持方法的调用
 :doctype: article
 :encoding: utf-8
 :lang: zh-cn
@@ -12,10 +12,3 @@
 :experimental:
 :icons: font
 
-== 关系运算
-实现关系运算指令
-详细参考ByteCodeCMPExecutor
-
-== if指令的实现
-
-== for循环和数组的实现
