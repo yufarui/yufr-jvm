@@ -1,5 +1,6 @@
 package indi.yufr.jvm.share.byteCode;
 
+import indi.yufr.jvm.share.vm.oops.ArrayOop;
 import indi.yufr.jvm.share.vm.oops.InstanceKlass;
 import indi.yufr.jvm.share.vm.runtime.JavaThread;
 import indi.yufr.jvm.share.vm.runtime.JavaVFrame;
@@ -32,6 +33,21 @@ public class ByteCodeLoadExecutor extends ByteCodeExecutor {
 
         Opcode opcode = byteCode.getOpcode();
         String prefix = ByteCodeExecutorContext.parseByteCodePrefix(opcode, "LOAD");
+
+        // 处理 IA FA ... AA命令
+        if (prefix.length() == 2) {
+
+            int index = (int) frame.pop().getData();
+            ArrayOop arrayOop = (ArrayOop) frame.pop().getData();
+
+            if (index > arrayOop.getSize() - 1) {
+                throw new Error("数组访问越界");
+            }
+
+            frame.push(new StackValue(arrayOop.getType(), arrayOop.getData()[index]));
+            return;
+        }
+
         int suffix = ByteCodeExecutorContext.parseByteCodeLastNum(byteCode.getOpcode());
 
         StackValue local;

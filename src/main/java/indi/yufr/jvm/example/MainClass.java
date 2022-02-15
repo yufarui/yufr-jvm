@@ -8,40 +8,34 @@ public class MainClass {
     public static final String HELLO_WORLD = "Hello World";
 
     public static void main(String[] args) {
-        System.out.println(HELLO_WORLD);
+//        System.out.println(HELLO_WORLD);
+//
+//        long l = 0x1111_f000_1111_f000L;
+//        int i = (int) l;
+//
+//        System.out.println(i);
+//
+//        int num1 = 10;
+//        int num2 = 12;
+//
+//        System.out.println(num1 + num2);
+//        System.out.println(num2 - num1);
+//        System.out.println(num2 * num1);
+//        System.out.println(num2 / num1);
+//
+//        System.out.println(num1++);
+//        System.out.println(--num1);
+//
+//        System.out.println(num1 += 0x7f00_0000);
+//
+//        if (num2 == 10 || num2 == 12) {
+//            System.out.println(1);
+//        }
 
-        long l = 0x1111_f000_1111_f000L;
-        int i = (int) l;
+        byte[] arr = {1, 2};
 
-        System.out.println(i);
-
-        int num1 = 10;
-        int num2 = 12;
-
-        System.out.println(num1 + num2);
-        System.out.println(num2 - num1);
-        System.out.println(num2 * num1);
-        System.out.println(num2 / num1);
-
-        System.out.println(num1++);
-        System.out.println(--num1);
-
-        System.out.println(num1 += 0x7f00_0000);
-
-        // 优先级 由编译器控制
-        int x = 100;
-        int y = 2;
-        int z = 3;
-
-        int a = (x + y) * z;
-        System.out.println(a);
-
-        if (a > 300 && a < 500) {
-            System.out.println(true);
-        }
-
-        for (int j = 0; j < 3; j++) {
-            System.out.println(j);
+        for (byte b : arr) {
+            System.out.println(b);
         }
     }
 

@@ -23,7 +23,7 @@ public abstract class ByteCodeExecutor {
 
     public abstract boolean canSupport(Opcode opcode);
 
-    public ByteCode doParse(byte[] content, ByteIndex index, Opcode opcode) {
+    public final ByteCode doParse(byte[] content, ByteIndex index, Opcode opcode) {
 
         if (opcode.getOpNum() == -1) {
             throw new RuntimeException("还未能解析的opcode: " + opcode.name());
@@ -41,7 +41,8 @@ public abstract class ByteCodeExecutor {
         log.info("开始执行指令:{},指令所在游标:{}", byteCode.getOpcode().name(), byteCode.getCursor());
 
         if (ifControlFlow()) {
-            doExecuteInControlFlow(thread, belongKlass, byteCode, byteIndex);
+            executeInControlFlow(thread, belongKlass, byteCode, byteIndex);
+            log.info("指令进行跳转,跳转到游标{}", byteIndex.getIndex());
         } else {
             doExecute(thread, belongKlass, byteCode);
             byteIndex.plus(1 + byteCode.getContent().length);
@@ -53,7 +54,7 @@ public abstract class ByteCodeExecutor {
         log.info("暂未支持的指令");
     }
 
-    public void doExecuteInControlFlow(JavaThread thread, InstanceKlass belongKlass, ByteCode byteCode, ByteIndex byteIndex) {
+    public void executeInControlFlow(JavaThread thread, InstanceKlass belongKlass, ByteCode byteCode, ByteIndex byteIndex) {
         log.info("暂未支持的指令");
     }
 

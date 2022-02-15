@@ -1,5 +1,6 @@
 package indi.yufr.jvm.share.byteCode;
 
+import indi.yufr.jvm.share.vm.oops.ArrayOop;
 import indi.yufr.jvm.share.vm.oops.InstanceKlass;
 import indi.yufr.jvm.share.vm.runtime.JavaThread;
 import indi.yufr.jvm.share.vm.runtime.JavaVFrame;
@@ -34,16 +35,31 @@ public class ByteCodeStoreExecutor extends ByteCodeExecutor {
 
         Opcode opcode = byteCode.getOpcode();
         String prefix = ByteCodeExecutorContext.parseByteCodePrefix(opcode, "STORE");
+
+        // 处理 IA FA ... AA命令
+        if (prefix.length() == 2) {
+            StackValue stackValue = frame.pop();
+            int index = (int) frame.pop().getData();
+            ArrayOop arrayOop = (ArrayOop) frame.pop().getData();
+
+            if (index > arrayOop.getSize() - 1) {
+                throw new Error("数组访问越界");
+            }
+            arrayOop.getData()[index] = stackValue.getData();
+            return;
+        }
+
+        // 处理剩余Store系命令
         int suffix = ByteCodeExecutorContext.parseByteCodeLastNum(byteCode.getOpcode());
         byte[] content = byteCode.getContent();
 
-        // 暂时未处理A开头的数组
         StackValue pop = frame.pop();
         if (suffix == -1) {
             frame.add(content[0], pop);
         } else {
             frame.add(suffix, pop);
         }
+
     }
 
 }

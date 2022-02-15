@@ -1,4 +1,4 @@
-package indi.yufr.jvm.share.util;
+package indi.yufr.jvm.util;
 
 import indi.yufr.jvm.share.attribute.AttributeInfoExecutor;
 import indi.yufr.jvm.share.byteCode.ByteCodeExecutor;
@@ -6,6 +6,7 @@ import indi.yufr.jvm.share.constant.executor.ConstantInfoExecutorContext;
 import lombok.SneakyThrows;
 
 import java.io.File;
+import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -73,7 +74,11 @@ public class FindAllSubClass {
             return;
         }
 
-        if (clazz.getSuperclass() == superClazz) {
+        if (Modifier.isAbstract(clazz.getModifiers())) {
+            return;
+        }
+
+        if (superClazz.isAssignableFrom(clazz)) {
             result.add("new " + substring + "()");
         }
     }

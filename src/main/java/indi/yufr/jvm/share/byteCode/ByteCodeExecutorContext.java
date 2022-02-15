@@ -30,18 +30,25 @@ public class ByteCodeExecutorContext {
                 new ByteCodeMulExecutor(),
                 new ByteCodeRemExecutor(),
                 new ByteCodeSubExecutor(),
+                new ByteCodeArrayExecutor(),
+                new ByteCodeArrayLengthExecutor(),
                 new ByteCodeBiPushExecutor(),
-                new ByteCodeSiPushExecutor(),
                 new ByteCodeClassCastExecutor(),
+                new ByteCodeCMPExecutor(),
+                new ByteCodeConstExecutor(),
+                new ByteCodeDupExecutor(),
                 new ByteCodeGetStaticExecutor(),
+                new ByteCodeGOTOExecutor(),
+                new ByteCodeIFCMPExecutor(),
+                new ByteCodeIINCExecutor(),
                 new ByteCodeInvokeSpecialExecutor(),
                 new ByteCodeInvokeVirtualExecutor(),
-                new ByteCodeIINCExecutor(),
-                new ByteCodeConstExecutor(),
                 new ByteCodeLdcExecutor(),
                 new ByteCodeLoadExecutor(),
                 new ByteCodeReturnExecutor(),
-                new ByteCodeStoreExecutor()
+                new ByteCodeSiPushExecutor(),
+                new ByteCodeStoreExecutor(),
+                new ByteCodeNopExecutor()
         );
     }
 
@@ -85,6 +92,14 @@ public class ByteCodeExecutorContext {
 
         int index = name.indexOf(keyword);
         return name.substring(0, index);
+    }
+
+    protected static String parseByteCodeSuffix(Opcode opcode, String keyword) {
+
+        String name = opcode.name();
+
+        int index = name.indexOf(keyword);
+        return name.substring(index + keyword.length());
     }
 
     protected static int parseByteCodeLastNum(Opcode opcode) {

@@ -14,7 +14,7 @@ import lombok.Getter;
  */
 public enum Opcode {
 
-    NOP((byte) 0x00, -1),
+    NOP((byte) 0x00, 0),
     ACONST_NULL((byte) 0x01, -1),
     ICONST_0((byte) 0x03, 0),
     ICONST_1((byte) 0x04, 0),
@@ -22,16 +22,13 @@ public enum Opcode {
     ICONST_3((byte) 0x06, 0),
     ICONST_4((byte) 0x07, 0),
     ICONST_5((byte) 0x08, 0),
-
-    LCONST_0((byte) 0x09, -1),
-    LCONST_1((byte) 0x0a, -1),
-
+    LCONST_0((byte) 0x09, 0),
+    LCONST_1((byte) 0x0a, 0),
     FCONST_0((byte) 0x0b, 0),
     FCONST_1((byte) 0x0c, 0),
     FCONST_2((byte) 0x0d, 0),
-
-    DCONST_0((byte) 0x0e, -1),
-    DCONST_1((byte) 0x0f, -1),
+    DCONST_0((byte) 0x0e, 0),
+    DCONST_1((byte) 0x0f, 0),
 
     BIPUSH((byte) 0x10, 1),
     SIPUSH((byte) 0x11, 1),
@@ -71,14 +68,14 @@ public enum Opcode {
     ALOAD_2((byte) 0x2c, 0),
     ALOAD_3((byte) 0x2d, 0),
 
-    IALOAD((byte) 0x2e, 1),
-    LALOAD((byte) 0x2f, 1),
-    FALOAD((byte) 0x30, 1),
-    DALOAD((byte) 0x31, 1),
-    AALOAD((byte) 0x32, 1),
-    BALOAD((byte) 0x33, 1),
-    CALOAD((byte) 0x34, 1),
-    SALOAD((byte) 0x35, 1),
+    IALOAD((byte) 0x2e, 0),
+    LALOAD((byte) 0x2f, 0),
+    FALOAD((byte) 0x30, 0),
+    DALOAD((byte) 0x31, 0),
+    AALOAD((byte) 0x32, 0),
+    BALOAD((byte) 0x33, 0),
+    CALOAD((byte) 0x34, 0),
+    SALOAD((byte) 0x35, 0),
 
     ISTORE((byte) 0x36, 1),
     LSTORE((byte) 0x37, 1),
@@ -115,8 +112,12 @@ public enum Opcode {
     FASTORE((byte) 0x51, 0),
     DASTORE((byte) 0x52, 0),
     AASTORE((byte) 0x53, 0),
+    BASTORE((byte) 0x54, 0),
+    CASTORE((byte) 0x55, 0),
+    SASTORE((byte) 0x56, 0),
 
-    DUP((byte) 0x59, -1),
+    DUP((byte) 0x59, 0),
+    DUP2((byte) 0x5c, 0),
 
     IADD((byte) 0x60, 0),
     LADD((byte) 0x61, 0),
@@ -142,7 +143,7 @@ public enum Opcode {
     LREM((byte) 0x71, 0),
     FREM((byte) 0x72, 0),
     DREM((byte) 0x73, 0),
-    
+
     IINC((byte) 0x84, 2),
 
     /**
@@ -169,7 +170,7 @@ public enum Opcode {
     FCMPG((byte) 0x96, 0),
     DCMPL((byte) 0x97, 0),
     DCMPG((byte) 0x98, 0),
-    
+
     IFEQ((byte) 0x99, 0),
     IFNE((byte) 0x9a, 0),
     IFLT((byte) 0x9b, 0),
@@ -177,16 +178,16 @@ public enum Opcode {
     IFGT((byte) 0x9d, 0),
     IFLE((byte) 0x9e, 0),
 
-    IF_ICMPEQ((byte) 0x9f, -1),
-    IF_ICMPNE((byte) 0xa0, -1),
-    IF_ICMPLT((byte) 0xa1, -1),
-    IF_ICMPGE((byte) 0xa2, -1),
-    IF_ICMPGT((byte) 0xa3, -1),
-    IF_ICMPLE((byte) 0xa4, -1),
-    IF_ACMPEQ((byte) 0xa5, -1),
-    IF_ACMPNE((byte) 0xa6, -1),
+    IF_ICMPEQ((byte) 0x9f, 2),
+    IF_ICMPNE((byte) 0xa0, 2),
+    IF_ICMPLT((byte) 0xa1, 2),
+    IF_ICMPGE((byte) 0xa2, 2),
+    IF_ICMPGT((byte) 0xa3, 2),
+    IF_ICMPLE((byte) 0xa4, 2),
+    IF_ACMPEQ((byte) 0xa5, 2),
+    IF_ACMPNE((byte) 0xa6, 2),
 
-    GOTO((byte) 0xa7, -1),
+    GOTO((byte) 0xa7, 2),
 
     IRETURN((byte) 0xac, -1),
 
@@ -205,9 +206,9 @@ public enum Opcode {
     INVOKEDYNAMIC((byte) 0xba, -1),
 
     NEW((byte) 0xbb, -1),
-    NEWARRAY((byte) 0xbc, -1),
-    ANEWARRAY((byte) 0xbd, -1),
-    ARRAYLENGTH((byte) 0xbe, -1),
+    NEWARRAY((byte) 0xbc, 1),
+    ANEWARRAY((byte) 0xbd, 2),
+    ARRAYLENGTH((byte) 0xbe, 0),
 
     ATHROW((byte) 0xbf, -1),
     CHECKCAST((byte) 0xc0, -1),
