@@ -30,6 +30,8 @@ public class ArrayOop {
     public ArrayOop(BasicType type, int size) {
         this.type = type;
         this.size = size;
+
+        this.data = new Object[size];
     }
 
     public ArrayOop(BasicType type, String className, int size) {

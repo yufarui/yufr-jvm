@@ -80,8 +80,6 @@ public class JavaNativeInterface {
 
         thread.getStack().push(frame);
 
-        log.info("第 " + thread.getStack().size() + " 个栈帧");
-
         // 执行任务交给字节码解释器
         ByteCodeExecutorContext.run(thread, methodInfo);
     }
