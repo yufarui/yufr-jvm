@@ -1,6 +1,8 @@
 package indi.yufr.jvm.share.byteCode;
 
 import indi.yufr.jvm.share.byteCode.arithmethic.*;
+import indi.yufr.jvm.share.byteCode.invoke.ByteCodeInvokeSpecialExecutor;
+import indi.yufr.jvm.share.byteCode.invoke.ByteCodeInvokeExecutor;
 import indi.yufr.jvm.share.vm.classFile.ByteIndex;
 import indi.yufr.jvm.share.vm.oops.InstanceKlass;
 import indi.yufr.jvm.share.vm.oops.MethodInfo;
@@ -30,7 +32,7 @@ public class ByteCodeExecutorContext {
                 new ByteCodeMulExecutor(),
                 new ByteCodeRemExecutor(),
                 new ByteCodeSubExecutor(),
-                new ByteCodeArrayExecutor(),
+                new ByteCodeNewExecutor(),
                 new ByteCodeArrayLengthExecutor(),
                 new ByteCodeBiPushExecutor(),
                 new ByteCodeClassCastExecutor(),
@@ -42,7 +44,7 @@ public class ByteCodeExecutorContext {
                 new ByteCodeIFCMPExecutor(),
                 new ByteCodeIINCExecutor(),
                 new ByteCodeInvokeSpecialExecutor(),
-                new ByteCodeInvokeVirtualExecutor(),
+                new ByteCodeInvokeExecutor(),
                 new ByteCodeLdcExecutor(),
                 new ByteCodeLoadExecutor(),
                 new ByteCodeReturnExecutor(),

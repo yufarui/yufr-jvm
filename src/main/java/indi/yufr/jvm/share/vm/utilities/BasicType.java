@@ -19,6 +19,7 @@ public enum BasicType {
     T_NARROWKLASS(18),
     T_CONFLICT(19),
     T_ILLEGAL(99),
+    T_Throwable(100)
     ;
 
     BasicType(int type) {

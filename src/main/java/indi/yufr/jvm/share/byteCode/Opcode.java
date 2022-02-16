@@ -189,9 +189,11 @@ public enum Opcode {
 
     GOTO((byte) 0xa7, 2),
 
-    IRETURN((byte) 0xac, -1),
-
-    ARETURN((byte) 0xb0, -1),
+    IRETURN((byte) 0xac, 0),
+    LRETURN((byte) 0xad, 0),
+    FRETURN((byte) 0xae, 0),
+    DRETURN((byte) 0xaf, 0),
+    ARETURN((byte) 0xb0, 0),
     RETURN((byte) 0xb1, 0),
 
     GETSTATIC((byte) 0xb2, 2),
@@ -201,11 +203,11 @@ public enum Opcode {
 
     INVOKEVIRTUAL((byte) 0xb6, 2),
     INVOKESPECIAL((byte) 0xb7, 2),
-    INVOKESTATIC((byte) 0xb8, -1),
-    INVOKEshortERFACE((byte) 0xb9, -1),
-    INVOKEDYNAMIC((byte) 0xba, -1),
+    INVOKESTATIC((byte) 0xb8, 2),
+    INVOKEINTERFACE((byte) 0xb9, 4),
+    INVOKEDYNAMIC((byte) 0xba, 4),
 
-    NEW((byte) 0xbb, -1),
+    NEW((byte) 0xbb, 2),
     NEWARRAY((byte) 0xbc, 1),
     ANEWARRAY((byte) 0xbd, 2),
     ARRAYLENGTH((byte) 0xbe, 0),

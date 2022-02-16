@@ -28,6 +28,6 @@ public class Main {
         Threads.setCurrentThread(thread);
 
         // 执行main方法
-        JavaNativeInterface.callStaticMethod(mainMethod);
+        JavaNativeInterface.callMethod(mainMethod);
     }
 }

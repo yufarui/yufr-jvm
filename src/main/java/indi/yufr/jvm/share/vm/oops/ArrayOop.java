@@ -27,6 +27,11 @@ public class ArrayOop {
 
     private Object[] data;
 
+    public ArrayOop(BasicType type, int size) {
+        this.type = type;
+        this.size = size;
+    }
+
     public ArrayOop(BasicType type, String className, int size) {
         this.type = type;
         this.className = className;

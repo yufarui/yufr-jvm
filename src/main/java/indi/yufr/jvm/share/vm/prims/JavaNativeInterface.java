@@ -12,6 +12,8 @@ import indi.yufr.jvm.share.vm.utilities.AccessFlags;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Stack;
+
 @Slf4j
 public class JavaNativeInterface {
 
@@ -32,21 +34,18 @@ public class JavaNativeInterface {
         return null;
     }
 
-    public static void callStaticMethod(MethodInfo methodInfo) {
+    public static void callMethod(MethodInfo methodInfo) {
 
         JavaVFrame prevFrame = null;
         JavaThread thread = Threads.currentThread();
 
         short accessFlags = methodInfo.getAccessFlags();
         AccessFlags realAccessFlags = new AccessFlags(accessFlags);
-        if (!realAccessFlags.isStatic()) {
-            throw new RuntimeException("非静态方法,调用失败");
-        }
 
         // 获取参数信息
         MethodDescriptor methodDescriptor = methodInfo.methodDescriptorHandler();
 
-        if (methodDescriptor.getParamsInfo().size() != 0) {
+        if (!realAccessFlags.isStatic() || methodDescriptor.getParamsInfo().size() != 0) {
 
             if (0 != thread.getStack().size()) {
                 log.info("\t 从上一个栈帧取参数值");
@@ -63,9 +62,19 @@ public class JavaNativeInterface {
 
         JavaVFrame frame = new JavaVFrame(codeAttributeInfo.getMaxLocals(), methodInfo);
 
+        // 静态方法实际上 和 非静态保持了一致
+        // 非静态方法 多压入了一个this引用
         if (null != prevFrame) {
-            for (int i = methodDescriptor.getParamsInfo().size() - 1; i >= 0; i--) {
-                frame.add(i, prevFrame.getStack().pop());
+
+            if (realAccessFlags.isStatic()) {
+                for (int i = 0; i < methodDescriptor.getParamsInfo().size(); i++) {
+                    frame.add(i, prevFrame.getStack().pop());
+                }
+            } else {
+                for (int i = 0; i < methodDescriptor.getParamsInfo().size(); i++) {
+                    frame.add(i, prevFrame.getStack().pop());
+                }
+                frame.add(0, prevFrame.pop());
             }
         }
 
@@ -77,7 +86,4 @@ public class JavaNativeInterface {
         ByteCodeExecutorContext.run(thread, methodInfo);
     }
 
-    public static void callMethod(MethodInfo methodID) {
-
-    }
 }

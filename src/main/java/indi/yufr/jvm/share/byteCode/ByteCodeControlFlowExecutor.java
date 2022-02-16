@@ -1,5 +1,6 @@
 package indi.yufr.jvm.share.byteCode;
 
+import indi.yufr.jvm.share.tools.DataTranslate;
 import indi.yufr.jvm.share.tools.Stream;
 import indi.yufr.jvm.share.vm.classFile.ByteIndex;
 import indi.yufr.jvm.share.vm.oops.InstanceKlass;
@@ -24,7 +25,7 @@ public abstract class ByteCodeControlFlowExecutor extends ByteCodeExecutor {
 
         if (result) {
             byte[] content = byteCode.getContent();
-            short cursor = (short) Stream.readInOrder(content);
+            int cursor = DataTranslate.byteToUnsignedShort(content);
             byteIndex.plus(cursor);
         } else {
             // 没有执行挑战,按顺序执行下一个指令

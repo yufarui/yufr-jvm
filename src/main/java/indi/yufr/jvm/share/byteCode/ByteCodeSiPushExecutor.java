@@ -1,5 +1,6 @@
 package indi.yufr.jvm.share.byteCode;
 
+import indi.yufr.jvm.share.tools.DataTranslate;
 import indi.yufr.jvm.share.tools.Stream;
 import indi.yufr.jvm.share.vm.oops.InstanceKlass;
 import indi.yufr.jvm.share.vm.runtime.JavaThread;
@@ -27,7 +28,7 @@ public class ByteCodeSiPushExecutor extends ByteCodeExecutor {
         JavaVFrame frame = (JavaVFrame) thread.getStack().peek();
 
         byte[] content = byteCode.getContent();
-        int val = (short) Stream.readInOrder(content);
+        int val = DataTranslate.byteToUnsignedShort(content);
 
         frame.push(new StackValue(BasicType.T_INT, val));
     }

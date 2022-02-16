@@ -31,12 +31,18 @@ public class MainClass {
 //        if (num2 == 10 || num2 == 12) {
 //            System.out.println(1);
 //        }
+//
+//        byte[] arr = {1, 2};
+//
+//        for (byte b : arr) {
+//            System.out.println(b);
+//        }
 
-        byte[] arr = {1, 2};
+        new MainClass().show();
+    }
 
-        for (byte b : arr) {
-            System.out.println(b);
-        }
+    public void show() {
+        System.out.println("show");
     }
 
 }

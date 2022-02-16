@@ -1,5 +1,8 @@
-package indi.yufr.jvm.share.byteCode;
+package indi.yufr.jvm.share.byteCode.invoke;
 
+import indi.yufr.jvm.share.byteCode.ByteCode;
+import indi.yufr.jvm.share.byteCode.ByteCodeExecutor;
+import indi.yufr.jvm.share.byteCode.Opcode;
 import indi.yufr.jvm.share.constant.content.ConstantContent;
 import indi.yufr.jvm.share.constant.content.MetaRefInfo;
 import indi.yufr.jvm.share.tools.DataTranslate;
@@ -11,24 +14,22 @@ import indi.yufr.jvm.share.vm.oops.MethodInfo;
 import indi.yufr.jvm.share.vm.prims.JavaNativeInterface;
 import indi.yufr.jvm.share.vm.runtime.JavaThread;
 import indi.yufr.jvm.share.vm.runtime.JavaVFrame;
-import indi.yufr.jvm.share.vm.runtime.StackValue;
-import indi.yufr.jvm.share.vm.utilities.BasicType;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
-import java.lang.reflect.Method;
+import java.lang.reflect.Constructor;
 import java.util.List;
 
 /**
- * @date: 2022/1/20 16:10
+ * @date: 2022/1/20 10:30
  * @author: farui.yu
  */
 @Slf4j
-public class ByteCodeInvokeVirtualExecutor extends ByteCodeExecutor {
+public class ByteCodeInvokeSpecialExecutor extends ByteCodeExecutor {
+
     @Override
     public boolean canSupport(Opcode opcode) {
-
-        if (opcode.equals(Opcode.INVOKEVIRTUAL)) {
+        if (opcode.equals(Opcode.INVOKESPECIAL)) {
             return true;
         }
 
@@ -38,6 +39,8 @@ public class ByteCodeInvokeVirtualExecutor extends ByteCodeExecutor {
     @SneakyThrows
     @Override
     public void doExecute(JavaThread thread, InstanceKlass belongKlass, ByteCode byteCode) {
+        JavaVFrame frame = (JavaVFrame) thread.getStack().peek();
+
         byte[] content = byteCode.getContent();
 
         int methodRefIndex = DataTranslate.byteToUnsignedShort(content);
@@ -48,8 +51,6 @@ public class ByteCodeInvokeVirtualExecutor extends ByteCodeExecutor {
         String className = metaRefInfo.getClassName(belongKlass);
         String methodName = metaRefInfo.getName(belongKlass);
         String descriptorName = metaRefInfo.getDescriptionName(belongKlass);
-
-        JavaVFrame frame = (JavaVFrame) thread.getStack().peek();
 
         if (className.startsWith("java")) {
 
@@ -62,28 +63,36 @@ public class ByteCodeInvokeVirtualExecutor extends ByteCodeExecutor {
 
             Object stackValueData = frame.pop().getData();
 
-            Method fun = stackValueData.getClass().getMethod(methodName, paramsClass);
+            if (methodName.equals("<init>")) {
 
-            if (BasicType.T_VOID == methodReturnDes.getType()) {
-                fun.invoke(stackValueData, params);
+                if (null == stackValueData || stackValueData.equals("")) {
+                    log.info("\t NEW字节码指令未创建对象，在这里创建");
+
+                    Class<?> clazz = Class.forName(className.replace('/', '.'));
+                    Constructor<?> constructor = clazz.getConstructor(paramsClass);
+
+                    stackValueData = constructor.newInstance(params);
+                }
+
+                if (!className.equals("java/lang/Object")) {
+                    // 注意：这里应该是给栈帧顶部的StackValue赋值，而不是创建新的压栈
+                    frame.getStack().peek().setData(stackValueData);
+                }
             } else {
-                frame.push(new StackValue(methodReturnDes.getType(), fun.invoke(stackValueData, params)));
+                throw new Error("java体系，非构造方法，未做处理");
             }
         } else {
             InstanceKlass klass = BootClassLoader.findLoadedKlass(className.replace('/', '.'));
             if (null == klass) {
-                throw new Error("类还未加载: " + className);
-            }
+                log.info("\t 开始加载未加载的类:" + className);
 
+                klass = BootClassLoader.loadKlass(className.replace('/', '.'));
+                if (null == klass) {
+                    throw new Error("不存在的类: " + className);
+                }
+            }
             MethodInfo methodID = JavaNativeInterface.getMethodID(klass, methodName, descriptorName);
-            if (null == methodID) {
-                throw new Error("不存在的方法: " + methodName + "#" + descriptorName);
-            }
-
             JavaNativeInterface.callMethod(methodID);
         }
-
     }
-
-
 }
