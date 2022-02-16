@@ -7,6 +7,7 @@ public class MainClass {
 
     public static final String HELLO_WORLD = "Hello World";
 
+    // java版字节码实现完毕,准备开始c语言版本的学习
     public static void main(String[] args) {
         step1();
 
