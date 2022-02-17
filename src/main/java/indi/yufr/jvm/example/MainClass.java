@@ -10,18 +10,18 @@ public class MainClass {
     // java版字节码实现完毕,准备开始c语言版本的学习
     public static void main(String[] args) {
         step1();
-
         step2();
 
         int num1 = 10;
-        int num2 = 12;
+        int num2 = new MainClass().functionInvoke(num1);
 
         step3(num1, num2);
-
         step4(num2);
-
         step5();
+    }
 
+    public int functionInvoke(int num) {
+        return num + 2;
     }
 
     private static void step1() {

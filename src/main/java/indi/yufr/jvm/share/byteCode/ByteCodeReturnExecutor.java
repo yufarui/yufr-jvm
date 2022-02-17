@@ -29,6 +29,7 @@ public class ByteCodeReturnExecutor extends ByteCodeExecutor {
 
         JavaVFrame frame = (JavaVFrame) thread.getStack().pop();
 
+        // return 只可能压入一个stackValue
         if (!frame.getStack().isEmpty()) {
             StackValue value = frame.getStack().pop();
             JavaVFrame newFrame = (JavaVFrame) thread.getStack().peek();

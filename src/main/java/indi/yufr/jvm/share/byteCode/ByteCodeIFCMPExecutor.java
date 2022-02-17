@@ -47,14 +47,15 @@ public class ByteCodeIFCMPExecutor extends ByteCodeControlFlowExecutor {
 
         String opName = byteCode.getOpcode().name();
 
-        Object value1;
+        // value1 先入栈,之后才是value2
         Object value2;
+        Object value1;
         if (opName.startsWith("IF_")) {
+            value2 = frame.getStack().pop().getData();
             value1 = frame.getStack().pop().getData();
-            value2 = frame.getStack().pop().getData();
         } else {
-            value1 = 0;
-            value2 = frame.getStack().pop().getData();
+            value2 = 0;
+            value1 = frame.getStack().pop().getData();
         }
 
         String suffix2 = suffix2(byteCode.getOpcode());
@@ -63,29 +64,29 @@ public class ByteCodeIFCMPExecutor extends ByteCodeControlFlowExecutor {
         switch (suffix2) {
             case "EQ":
                 if (opName.contains("_A")) {
-                    result = value2 == value1;
+                    result = value1 == value2;
                 } else {
-                    result = (int) value2 == (int) value1;
+                    result = (int) value1 == (int) value2;
                 }
                 break;
             case "NE":
                 if (opName.contains("_A")) {
-                    result = value2 != value1;
+                    result = value1 != value2;
                 } else {
-                    result = (int) value2 != (int) value1;
+                    result = (int) value1 != (int) value2;
                 }
                 break;
             case "LT":
-                result = (int) value2 < (int) value1;
+                result = (int) value1 < (int) value2;
                 break;
             case "LE":
-                result = (int) value2 <= (int) value1;
+                result = (int) value1 <= (int) value2;
                 break;
             case "GT":
-                result = (int) value2 > (int) value1;
+                result = (int) value1 > (int) value2;
                 break;
             case "GE":
-                result = (int) value2 >= (int) value1;
+                result = (int) value1 >= (int) value2;
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + suffix2);

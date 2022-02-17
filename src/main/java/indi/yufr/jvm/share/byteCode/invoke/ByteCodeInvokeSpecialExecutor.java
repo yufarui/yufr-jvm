@@ -56,8 +56,6 @@ public class ByteCodeInvokeSpecialExecutor extends ByteCodeExecutor {
 
             List<DescriptorInfo> methodParamsDes = MethodInfo.parseMethodParams(descriptorName);
 
-            DescriptorInfo methodReturnDes = MethodInfo.parseMethodReturn(descriptorName);
-
             Object[] params = DescriptorInfo.parseMethodParams(methodParamsDes, frame);
             Class<?>[] paramsClass = DescriptorInfo.getParamsType(methodParamsDes);
 

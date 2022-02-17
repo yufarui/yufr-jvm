@@ -12,8 +12,6 @@ import indi.yufr.jvm.share.vm.utilities.AccessFlags;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.Stack;
-
 @Slf4j
 public class JavaNativeInterface {
 
@@ -72,7 +70,7 @@ public class JavaNativeInterface {
                 }
             } else {
                 for (int i = 0; i < methodDescriptor.getParamsInfo().size(); i++) {
-                    frame.add(i, prevFrame.getStack().pop());
+                    frame.add(i + 1, prevFrame.getStack().pop());
                 }
                 frame.add(0, prevFrame.pop());
             }
