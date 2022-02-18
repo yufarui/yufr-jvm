@@ -153,9 +153,12 @@ printf 最主要包含占位符,输出文本里面可以使用多个占位符;
 - `%zd`：`size_t`类型。
 - `%%`：输出一个百分号。
 
+变量 运算符 流程控制 与java保持一致;无需记忆!
+
 == 基本数据类型
 
-变量 运算符 流程控制 与java保持一致;无需记忆!
+=== 字符,整数和浮点数
+
 
 - 字符类型
 char 单字节;
@@ -173,6 +176,7 @@ char x = '\x42'; // 'B'的十六进制
 
 - 整数int
 位数不定
+
 不同计算机的int类型的大小是不一样的。比较常见的是使用4个字节（32位）存储一个int类型的值，但是2个字节（16位）或8个字节（64位）也有可能使用;
 
 - signed，unsigned
@@ -180,3 +184,100 @@ char x = '\x42'; // 'B'的十六进制
 整数 int,默认 为 signed int;
 但是 char,默认值,由系统决定,signed char 和 unsigned char都有可能!
 
+- 整数的子类型
+
+整数都是默认有符号的;
+
+[source,c]
+----
+short int a;
+long int b;
+long long int c;
+
+// int 可不写
+// 你也可以写无符号的短整数
+unsigned short a;
+----
+
+整数的极限值,忽略;
+
+- 整数的进制
+
+====
+[source,c]
+----
+int x = 100;
+printf("dec = %d\n", x); // 100
+printf("octal = %o\n", x); // 144
+printf("hex = %x\n", x); // 64
+printf("octal = %#o\n", x); // 0144 <1>
+printf("hex = %#x\n", x); // 0x64 <1>
+printf("hex = %#X\n", x); // 0X64
+----
+<1> 注释即为整数的其他进制写法
+====
+
+- 浮点数
+float 占用4字节
+double 占用8字节
+long double,占用16字节
+
+[source,c]
+----
+float c = 10.5;
+double x = 123.456e+3; // 123.456 x 10^3
+// 等同于
+double x = 123.456e3;
+----
+
+- 布尔类型
+
+C 语言原来并没有为布尔值单独设置一个类型，而是使用整数0表示伪，所有非零值表示真。
+C99 标准添加了类型_Bool，表示布尔值。但是，这个类型其实只是整数类型的别名，还是使用0表示伪，1表示真;
+[source,c]
+----
+int x = 1;
+if (x) {
+  printf("x is true!\n");
+}
+
+_Bool isNormal;
+
+isNormal = 1;
+if (isNormal)
+  printf("Everything is OK.\n");
+----
+
+=== 可移植性
+
+在头文件 `stdint.h` 中引入了精确宽度类型
+
+- `int8_t`：8位有符号整数。
+- `int16_t`：16位有符号整数。
+- `int32_t`：32位有符号整数。
+- `int64_t`：64位有符号整数。
+- `uint8_t`：8位无符号整数。
+- `uint16_t`：16位无符号整数。
+- `uint32_t`：32位无符号整数。
+- `uint64_t`：64位无符号整数。
+
+其中 `uint8_t`,即为单字节整数;在hotspot源码中大量存在;
+
+=== sizeof
+
+====
+[source,c]
+----
+// 参数为数据类型
+size_t x = sizeof(int); <1>
+
+// 参数为变量
+int i;
+sizeof(i);
+
+// 参数为数值
+sizeof(3.14);
+----
+<1> sizeof 可以直接计算类型占用的字节数;
+而sizeof返回值size_t,本质上是 unsigned int;
+====
