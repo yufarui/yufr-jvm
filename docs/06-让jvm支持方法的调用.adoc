@@ -14,3 +14,6 @@
 
 == 方法的调用
 
+.方法入参和出参的执行解析
+image::https://raw.githubusercontent.com/yufarui/simple_picture/main/jvm/function_invoke.png[]
+

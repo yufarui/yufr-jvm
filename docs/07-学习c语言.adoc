@@ -1,0 +1,182 @@
+= 07-学习c语言
+:doctype: article
+:encoding: utf-8
+:lang: zh-cn
+:toc: left
+:toc-title: 导航目录
+:toclevels: 4
+:sectnums:
+:sectanchors:
+
+:hardbreaks:
+:experimental:
+:icons: font
+
+[preface]
+想要看懂hotspot源码,逃不过,理解和学习c语言;
+
+推荐阅读::
+https://wangdoc.com/clang/index.html[阮一峰的c语言教程]
+非常感谢阮一峰老师的教程!学习c语言变得轻松很多!
+但是作为初学者,我们还需要进一步总结下!
+
+== 简介
+
+=== 历史
+
+C 语言最初是作为 Unix 系统的开发工具而发明的;
+C 语言是在B语言的基础上开发的;
+目前,Unix 和 Linux 系统现在还是使用 C 语言开发;
+
+=== C语言的版本
+
+- K＆R C
+- ANSI C（又称 C89 或 C90）
+- C95
+- C99 目前最流行的版本
+- C11
+- C17
+- C2x 据说可能会在2023年通过,到时就会称为C23;
+
+=== C语言的编译
+
+C 语言是一种编译型语言,源码都是文本文件,本身无法执行;必须通过编译器,生成二进制的可执行文件,才能执行;
+使用C语言需要GCC编译器;如同运行java需要jdk方可运行;
+
+> GCC在不同平台的安装
+
+- MINGW在Windows平台下的安装
+https://blog.csdn.net/wxh0000mm/article/details/100666329[]
+
+- 在Ubuntu中安装
+[source,bash]
+----
+# 更新包列表
+sudo apt update
+
+# 执行安装,此安装包含gcc,g++,make
+sudo apt install build-essential
+----
+
+- 在Centos下安装
+[source,bash]
+----
+# 更新包列表
+sudo yum update
+
+# 执行安装,此安装包含gcc,g++,make
+sudo yum -y install gcc gcc-c++ kernel-devel
+----
+
+使用 `gcc -v` 来验证是否安装成功!
+
+> GCC相关指令的熟练使用
+
+安装gcc完成后,需要熟练使用gcc指令
+
+gcc常用指令汇总::
+https://wangchujiang.com/linux-command/c/gcc.html[linux-command]
+
+当然你也可以使用 gcc --help来查看命令
+
+常用命令一览
+[source,bash]
+----
+gcc -c testfun.c    #将testfun.c编译成testfun.o
+
+# 编译多个文件,test为输出文件
+gcc testfun.c test.c -o test
+# 替换成此命令
+gcc *.c -o test
+----
+
+gcc命令 会在之后make文件中继续使用!
+
+== 基本使用
+
+说道C入门,最主要是要熟练使用printf方法
+
+====
+[source,c]
+----
+#include <stdio.h> <1>
+
+int main(void) { <2>
+  printf("Hello World\n");
+  printf("%s will learn c language\n", "you");
+  return 0;
+}
+----
+<1> #include 表示为头文件,不引入头文件 printf 无法使用!
+<2> main方法为 代码主入口;
+====
+
+挑战: 使用入门代码,编译通过并输出Hello World!
+
+printf 最主要包含占位符,输出文本里面可以使用多个占位符;
+
+常用的占位符,是和数据类型相关的;
+如字符 char 对应占位符 为 %c;
+如指针 point 对应占位符 为 %p;
+
+先将常用的占位符列出,请关注数据类型小节;
+- `%a`：浮点数。
+- `%A`：浮点数。
+- `%c`：字符。
+- `%d`：十进制整数。
+- `%e`：使用科学计数法的浮点数，指数部分的`e`为小写。
+- `%E`：使用科学计数法的浮点数，指数部分的`E`为大写。
+- `%i`：整数，基本等同于`%d`。
+- `%f`：小数（包含`float`类型和`double`类型）。
+- `%g`：6个有效数字的浮点数。整数部分一旦超过6位，就会自动转为科学计数法，指数部分的`e`为小写。
+- `%G`：等同于`%g`，唯一的区别是指数部分的`E`为大写。
+- `%hd`：十进制 short int 类型。
+- `%ho`：八进制 short int 类型。
+- `%hx`：十六进制 short int 类型。
+- `%hu`：unsigned short int 类型。
+- `%ld`：十进制 long int 类型。
+- `%lo`：八进制 long int 类型。
+- `%lx`：十六进制 long int 类型。
+- `%lu`：unsigned long int 类型。
+- `%lld`：十进制 long long int 类型。
+- `%llo`：八进制 long long int 类型。
+- `%llx`：十六进制 long long int 类型。
+- `%llu`：unsigned long long int 类型。
+- `%Le`：科学计数法表示的 long double 类型浮点数。
+- `%Lf`：long double 类型浮点数。
+- `%n`：已输出的字符串数量。该占位符本身不输出，只将值存储在指定变量之中。
+- `%o`：八进制整数。
+- `%p`：指针。
+- `%s`：字符串。
+- `%u`：无符号整数（unsigned int）。
+- `%x`：十六进制整数。
+- `%zd`：`size_t`类型。
+- `%%`：输出一个百分号。
+
+== 基本数据类型
+
+变量 运算符 流程控制 与java保持一致;无需记忆!
+
+- 字符类型
+char 单字节;
+
+字符类型在不同计算机的默认范围是不一样的。一些系统默认为-128到127，另一些系统默认为0到255。
+这两种范围正好都能覆盖0到127的 ASCII 字符范围。
+
+[source,c]
+----
+char x = 'B';
+char x = 66;
+char x = '\102'; // 'B'的八进制
+char x = '\x42'; // 'B'的十六进制
+----
+
+- 整数int
+位数不定
+不同计算机的int类型的大小是不一样的。比较常见的是使用4个字节（32位）存储一个int类型的值，但是2个字节（16位）或8个字节（64位）也有可能使用;
+
+- signed，unsigned
+
+整数 int,默认 为 signed int;
+但是 char,默认值,由系统决定,signed char 和 unsigned char都有可能!
+
