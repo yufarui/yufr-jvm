@@ -21,11 +21,11 @@ public abstract class ByteCodeControlFlowExecutor extends ByteCodeExecutor {
 
     public final void executeInControlFlow(JavaThread thread, InstanceKlass belongKlass, ByteCode byteCode, ByteIndex byteIndex) {
 
-        boolean result =  doExecuteInControlFlow(thread, belongKlass, byteCode);
+        boolean result = doExecuteInControlFlow(thread, belongKlass, byteCode);
 
         if (result) {
             byte[] content = byteCode.getContent();
-            int cursor = DataTranslate.byteToUnsignedShort(content);
+            short cursor = (short) Stream.readInOrder(content);
             byteIndex.plus(cursor);
         } else {
             // 没有执行挑战,按顺序执行下一个指令
