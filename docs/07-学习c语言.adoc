@@ -281,3 +281,63 @@ sizeof(3.14);
 <1> sizeof 可以直接计算类型占用的字节数;
 而sizeof返回值size_t,本质上是 unsigned int;
 ====
+
+== 指针
+
+熟练以下内容,即大致掌握了指针的用法!
+
+====
+[source,c]
+----
+#include <stdio.h>
+#include <stdint.h>
+
+void updateIntVariable(int *pInt);
+void updateBroVariable(int *pInt);
+void doublePoint(int *pInt);
+
+int main() {
+
+    int simpleInt = 1;
+    printf("current variable size %d\n", sizeof(int));
+    int *pInt = &simpleInt; <1>
+    updateIntVariable(pInt);
+    printf("current variable value %d\n", simpleInt);
+    updateBroVariable(pInt);
+    doublePoint(pInt);
+
+    return 0;
+}
+
+void updateIntVariable(int *pInt) {
+    *pInt = *pInt + 1; <2>
+    printf("current variable address %p\n", pInt);
+}
+
+void updateBroVariable(int *pInt) {
+    int *pBroInt = pInt + 1; <3>
+    *pBroInt = 3; <>
+    printf("bro point address %p\n", pBroInt);
+    printf("bro point real value %d\n", *pBroInt);
+    printf("two point minus, result %d\n", pBroInt - pInt);
+}
+
+void doublePoint(int* pInt) {
+    int **ppInt = &pInt; <4>
+    int *pBroInt = pInt + 1;
+    **ppInt = 4;
+    *ppInt = pBroInt;
+
+    printf("double point real value %d and address %p\n", **ppInt, *ppInt);
+    printf("single point real value %d and address %p\n", *pInt, pInt);
+}
+----
+<1> *号在变量声明处,代表声明了指针变量;
+&simpleInt,代表取出simpleInt在内存中所在地址;
+<2> *pInt = *pInt + 1; pInt原本是指针,而*号和指针变量在一起,此*号为运算符,意指从此地址取出实际存放的值;
+<3> 2,3比较; int *pBroInt = pint + 1, 这里是对指针进行加法操作;即地址进行加法操作;得到当然是一个新的地址;
+而此地址的值,是和sizeof(int)相关,请自行体会;
+<4> int **ppInt = &pInt; &pInt此处是指pInt的地址;即指针的地址,&在此处为运算符;
+====
+
+熟练掌握 *号在当做指针声明 和 *,& 号当做运算符时的写法;
