@@ -456,7 +456,8 @@ double average(int i, ...) {
 注意,数组声明后,没法再次声明;
 即 int arr[3]; 声明完成后;相当于所有成员声明值为0;
 不能执行 arr = {1, 2, 3};
-因为 此时的 arr 是整个数组的指针;
+因为 此时的 arr(数组名) 指的是整个数组的指针;
+即 arr(数组名) 是数组第一个元素地址;
 
 我们将 arr当做指针变量; 则有表达式 `arr == &arr[0]`
 arr(数组名称)只能当做指针变量来操作
@@ -533,3 +534,187 @@ int arr2[3][3] = {
 
 memcpy(dest, src, sizeof(dest));
 ----
+
+== 字符串
+
+C 语言没有单独的字符串类型，字符串被当作字符数组，即char类型的数组;
+
+编译器会给数组分配一段连续内存，所有字符储存在相邻的内存单元之中。在字符串结尾，C 语言会自动添加一个全是二进制0的字节，写作\0字符，表示字符串结束。
+[source,c]
+----
+{'H', 'e', 'l', 'l', 'o', '\0'}
+// 等价于
+"Hello"
+----
+
+当你在c中写了一个字符串,相当于写了一个以'\0'结尾的字符数组;
+
+=== 字符串的声明
+
+- 字符串声明解析
+
+====
+[source,c]
+----
+// 写法一
+char s[6] = "Hello"; <1>
+// 可简化为
+char s[] = "Hello";
+
+// 写法二
+char *s = "Hello"; <2>
+// 在写法2的基础上,此段操作会抛错;
+s[0] = 'z';
+----
+<1> 注意声明长度为6,字符数组,最后一位为'\0'
+通常 在声明字符数组时,字符数组的长度,可不写;由编译器根据字符串内容,去估算
+
+<2> 使用指针声明字符串;此时s的内容并非是字符数组,而是一个地址,该地址指向了"Hello";
+====
+
+- 优雅的字符串声明
+
+[source,c]
+----
+char greeting[50] = "Hello, how are you today!";
+
+// 等同于,多个字符串合并,与shell脚本一致
+char greeting[50] = "Hello, ""how are you ""today!";
+
+// 等同于
+char greeting[50] = "Hello, "
+  "how are you "
+  "today!";
+----
+
+=== 和字符串相关的函数
+
+- strlen()
+strlen()函数返回字符串的字节长度，不包括末尾的空字符'\0';
+
+====
+[source,c]
+----
+#include <stdio.h>
+#include <string.h>
+
+char s[50] = "hello";
+printf("%d\n", strlen(s));  // 5 <1>
+printf("%d\n", sizeof(s));  // 50 <2>
+----
+<1> 字符串长度为5;
+<2> 数组长度为50;
+====
+
+关于如何判断字符串长度,实际上是判断'\0'的位置;
+
+- strcpy() 和 strncpy()
+
+字符串的复制，不能使用赋值运算符，直接将一个字符串赋值给字符数组变量;
+
+[source,c]
+----
+char str1[10];
+char str2[10];
+
+str1 = "abc"; // 报错
+str2 = str1;  // 报错
+----
+
+这里与 `数组的声明` 小节一致;无法再次声明数组;
+因为数组的变量名是一个固定的地址，不能修改，使其指向另一个地址。
+补充下: 当数组声明完成时,就已经分配了地址;
+
+** strcpy()
+
+如果我们想要复制字符串,可以使用 strcpy()函数;全量的复制另一个字符串;
+
+[source,c]
+----
+strcpy(char dest[], const char source[]);
+----
+指定从source中全量的复制dest;
+
+[source,c]
+----
+#include <stdio.h>
+#include <string.h>
+
+int main(void) {
+  char s[] = "Hello, world!";
+  char t[100];
+
+  strcpy(t, s);
+
+  t[0] = 'z';
+  printf("%s\n", s);  // "Hello, world!"
+  printf("%s\n", t);  // "zello, world!"
+}
+----
+
+strcpy()函数有安全风险，因为它并不检查目标字符串的长度，是否足够容纳源字符串的副本，可能导致写入溢出。
+如果不能保证不会发生溢出，建议使用strncpy()函数代替。
+
+** strncpy()
+指定从src中的最大位数n,复制dest;
+
+[source,c]
+----
+char* strncat(
+  const char* dest,
+  const char* src,
+  size_t n
+);
+----
+
+[source,c]
+----
+char s1[40];
+char s2[12] = "hello world";
+
+strncpy(s1, s2, 5);
+s1[5] = '\0';
+
+printf("%s\n", s1); // hello
+----
+
+执行strncpy() 复制全部或部分字符串;
+
+- strcat() 和 strncat()
+- strcmp() 和 strncmp()
+
+暂时不用特别关注,当我们需要使用时,在研究;
+
+=== 字符数组
+
+[source,c]
+----
+char weekdays[][10] = {
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+  "Sunday"
+};
+
+char* weekdays[] = {
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+  "Sunday"
+};
+----
+
+== struct结构
+
+C 语言内置的数据类型，除了最基本的几种原始类型，只有数组属于复合类型，可以同时包含多个值，但是只能包含相同类型的数据，实际使用中并不够用。
+struct 仍然是一种数据类型,它和java中的类有很大的区别;之后我们学习c++时,那时候才会有真正的class出现;
+
+此小节,会避免介绍复杂的弹性数组成员;
+
+=== struct声明
