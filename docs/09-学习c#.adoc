@@ -1,0 +1,246 @@
+= 07-学习c++语言
+:doctype: article
+:encoding: utf-8
+:lang: zh-cn
+:toc: left
+:toc-title: 导航目录
+:toclevels: 2
+:sectnums:
+:sectanchors:
+
+:hardbreaks:
+:experimental:
+:icons: font
+
+[preface]
+既然c以及c++都学习;c#也学习下;游戏开发很多时候需要使用c#;
+
+推荐阅读::
+https://www.w3schools.com/cs/index.php[c#学习]
+
+== get started
+====
+[source, c#]
+----
+using System;
+
+namespace HelloWorld { <1>
+  class Program {
+    static void Main(string[] args) {
+      Console.WriteLine("Hello World!");
+    }
+  }
+}
+----
+<1> namespace is used to organize your code, and it is a container for classes and other namespaces.
+====
+
+== Type Casting
+[source, c#]
+----
+int myInt = 10;
+double myDouble = 5.25;
+bool myBool = true;
+
+Console.WriteLine(Convert.ToString(myInt));    // convert int to string
+Console.WriteLine(Convert.ToDouble(myInt));    // convert int to double
+Console.WriteLine(Convert.ToInt32(myDouble));  // convert double to int
+Console.WriteLine(Convert.ToString(myBool));   // convert bool to string
+----
+
+== user input
+
+[source, c#]
+----
+Console.WriteLine("Enter your age:");
+int age = Convert.ToInt32(Console.ReadLine());
+Console.WriteLine("Your age is: " + age);
+----
+
+== Arrays
+
+[source,c#]
+----
+using System;
+using System.Linq;
+
+namespace MyApplication
+{
+  class Program
+  {
+    static void Main(string[] args)
+    {
+      int[] myNumbers = {5, 1, 8, 9};
+      Console.WriteLine(myNumbers.Max());  // returns the largest value
+      Console.WriteLine(myNumbers.Min());  // returns the smallest value
+      Console.WriteLine(myNumbers.Sum());  // returns the sum of elements
+    }
+  }
+}
+----
+
+== Methods
+
+====
+[source, c#]
+----
+static void MyMethod(string country = "Norway") <1>
+{
+  Console.WriteLine(country);
+}
+
+static void Main(string[] args)
+{
+  MyMethod("Sweden");
+  MyMethod("India");
+  MyMethod();
+  MyMethod("USA");
+}
+
+// Sweden
+// India
+// Norway
+// USA
+----
+<1> Default Parameter Value
+====
+
+== Classes
+
+====
+[source,c#]
+----
+class Car
+{
+  string color = "red";
+
+  static void Main(string[] args)
+  {
+    Car myObj = new Car(); <1>
+    Console.WriteLine(myObj.color);
+  }
+}
+----
+<1> 对比c++,这样舒服很多;
+====
+
+=== Access Modifies
+
+====
+[source, c#]
+----
+class Car
+{
+  public string model = "Mustang"; <1>
+  string year;   // private <2>
+}
+
+class Program
+{
+  static void Main(string[] args)
+  {
+    Car myObj = new Car();
+    Console.WriteLine(myObj.model);
+  }
+}
+----
+<1> 可以看到 c# 和 java非常相似
+<2> By default, all members of a class are private if you don't specify an access modifier;
+====
+
+=== Properties
+
+A property is like a combination of a variable and a method, and it has two methods: a get and a set method;
+
+[source, c#]
+----
+class Person
+{
+  private string name; // field
+  public string Name   // property
+  {
+    get { return name; }
+    set { name = value; }
+  }
+}
+
+class Program
+{
+  static void Main(string[] args)
+  {
+    Person myObj = new Person();
+    myObj.Name = "Liam";
+    Console.WriteLine(myObj.Name);
+  }
+}
+----
+
+Automatic Properties (Short Hand)
+
+[source, c#]
+----
+class Person
+{
+  public string Name  // property
+  { get; set; }
+}
+
+class Program
+{
+  static void Main(string[] args)
+  {
+    Person myObj = new Person();
+    myObj.Name = "Liam";
+    Console.WriteLine(myObj.Name);
+  }
+}
+----
+
+=== Inheritance and polymorphism
+[source,c#]
+----
+class Animal  // Base class (parent)
+{
+  public void animalSound()
+  {
+    Console.WriteLine("The animal makes a sound");
+  }
+}
+
+class Pig : Animal  // Derived class (child)
+{
+  public void animalSound()
+  {
+    Console.WriteLine("The pig says: wee wee");
+  }
+}
+
+class Dog : Animal  // Derived class (child)
+{
+  public void animalSound()
+  {
+    Console.WriteLine("The dog says: bow wow");
+  }
+}
+
+class Program
+{
+  static void Main(string[] args)
+  {
+    Animal myAnimal = new Animal();  // Create a Animal object
+    Animal myPig = new Pig();  // Create a Pig object
+    Animal myDog = new Dog();  // Create a Dog object
+
+    myAnimal.animalSound();
+    myPig.animalSound();
+    myDog.animalSound();
+  }
+}
+----
+
+=== abstract and interface
+
+和java一致
+
+=== exception
+和java一致

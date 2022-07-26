@@ -1,0 +1,257 @@
+= 07-学习c++语言
+:doctype: article
+:encoding: utf-8
+:lang: zh-cn
+:toc: left
+:toc-title: 导航目录
+:toclevels: 2
+:sectnums:
+:sectanchors:
+
+:hardbreaks:
+:experimental:
+:icons: font
+
+[preface]
+想要看懂hotspot源码,逃不过,理解和学习c++语言;
+
+== 简介
+在c++中还是要继续使用指针,由程序员继续控制内存;而c# 和 java 则 不再支持指针的使用;由虚拟机执行对内存的管理!
+
+推荐学习::
+https://www.codecademy.com/learn/learn-c-plus-plus[学习c++]
+
+== 基本语法
+
+====
+[source,c++]
+----
+#include <iostream>
+using namespace std; <1>
+
+int main() {
+    cout << "Hello World"; // 输出 Hello World <2>
+    return 0;
+}
+----
+<1> using namespace std; 告诉编译器使用 std 命名空间。命名空间是 C++ 中一个相对新的概念。
+<2> cout 函数来自于
+====
+
+数据类型 变量类型 变量作用域 这与c是一致的;
+
+== c++基本的输入输出
+
+[source,c++]
+----
+    string name;
+    cout << "请输入您的名称： ";
+    cin >> name;
+    clog << "您的名称是： " << name << endl;
+    cerr << "请不要忽略代码异常";
+----
+
+== c++面向对象
+
+=== c++类&对象
+
+作为java开发程序员,对类和对象的认识是很充足的;
+
+=== c++ 类&对象常用语法
+
+- 成员函数
+- c++ 构造函数 与 析构函数
+- 拷贝构造函数
+
+[source, c++]
+----
+#include <iostream>
+using namespace std;
+
+class Box {
+public:
+    double length;   // 长度
+    double width;  // 宽度
+    double height;   // 高度
+    double getVolume(void);// 返回体积
+    friend class BoxOne;
+    static int count;
+
+    Box() {
+        cout << "create a box" << endl;
+    }
+
+    Box(double length, double width, double height): length(length), width(width), height(height) {
+    }
+
+    // 析构函数
+    ~Box() {
+        cout << "destory this box" << endl;
+    }
+
+    // 默认存在一个拷贝构造函数
+    Box(const Box &box) {
+        this->length = box.length;
+        this->width = box.width;
+        this->height = box.height;
+        cout << "copy construct end" << endl;
+    }
+
+    // 定义 友元函数
+    friend void printWidth(Box box);
+
+    // 在类中定义的函数 默认是内联函数
+    // 以空间换取时间,加快程序执行速度
+    void setLength(double length) {
+        this->length = length;
+    }
+
+    // 静态函数
+    static int getCount() {
+        return Box::count;
+    }
+private:
+    double volume;
+};
+----
+
+[source, c++]
+----
+#include <iostream>
+using namespace std;
+#include "Box.cpp";
+
+double Box::getVolume(void) {
+    return length * width * height;
+}
+
+void printWidth(Box box)
+{
+    /* 因为 printWidth() 是 Box 的友元，它可以直接访问该类的任何成员 */
+    cout << "Width of box : " << box.width << endl;
+}
+
+int main() {
+
+    Box box(1.1, 1.2, 1.3);
+
+    cout << box.getVolume() << endl;
+
+    // 也可以直接写成 Box copyBox = box;这是等价的写法;
+    Box copyBox(box);
+
+    cout << copyBox.getVolume() << endl;
+
+    copyBox.width = 1;
+    printWidth(copyBox);
+    printWidth(box);
+
+    // 使用类的指针
+    Box* pBox = new Box(1.1, 1.2, 1.3);
+    pBox = &copyBox;
+
+    return 0;
+}
+----
+
+=== c++继承
+
+推荐阅读::
+https://blog.csdn.net/TABE_/article/details/123054771[c++继承详解]
+
+- 基类&派生类
+
+[source,c++]
+----
+// 派生类
+class Rectangle: public Shape {
+   public:
+      int getArea(){
+         return (width * height);
+      }
+};
+----
+
+继承方式包括 public（公有的）、private（私有的）和 protected（受保护的），此项是可选的，如果不写，那么默认为 private。不同的继承方式会影响基类成员在派生类中的访问权限。
+
+- 改变访问权限
+- 名字遮蔽(重写)
+
+stu.show();
+stu.People::show();
+
+==== 继承带来的问题
+
+按照java的思路,必然是1个文件1个类;习惯将子类 和 父类 写在两个文件
+这可能会导致 include 加载两次相同的文件;
+
+推荐阅读::
+http://c.biancheng.net/view/7636.html[防止头文件被重复引入]
+
+====
+[source,c++]
+----
+// 在 子类 文件
+#ifndef _Box_class
+#include "Box.cpp";
+#endif
+
+// 基类文件
+#define _Box_class Box; <1>
+
+// 基类文件
+#pragma once <2>
+
+----
+<1> 使用 #define 系宏指令;
+<2> 如GCC 3.4版本之前不支持#pragma once;
+====
+
+=== 运算符重载
+
+[source,c++]
+----
+
+class Box {
+public:
+    // 重载 + 运算符，用于把两个 Box 对象相加
+    Box operator+(const Box& b) {
+        Box box;
+        box.length = this->length + b.length;
+        box.width = this->width + b.width;
+        box.height = this->height + b.height;
+        return box;
+    }
+}
+
+// 可以直接用+号来使用重载函数
+Box newBox = box + copyBox;
+----
+
+=== 多态
+
+不用记住太多;
+我们先记住虚函数的概念 和 java中抽象方法类似
+
+[source,c++]
+----
+// 虚函数可以有默认实现
+virtual int area() {
+ cout << "Parent class area :" <<endl;
+ return 0;
+}
+
+// 纯虚函数
+virtual int area() = 0;
+----
+
+[TIP]
+====
+虚函数
+虚函数是在基类中被声明为virtual，并在派生类中重新定义的成员函数，可实现成员函数的动态重载;
+
+抽象类
+包含纯虚函数的类称为抽象类。由于抽象类包含了没有定义的纯虚函数，所以不能定义抽象类的对象。
+====
+
+我们还需要学习下 c++11 语法!

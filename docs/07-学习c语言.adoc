@@ -801,7 +801,7 @@ double* temp = (double*) malloc(n * sizeof(double));
 
 === 其他方法
 
-- calloc()
+- calloc() 同 malloc 只不过多一个参数螚指定内存长度
 - realloc()
 
 暂时不做介绍 熟能生巧
